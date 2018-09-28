@@ -1,8 +1,8 @@
-var changeFrom = 'favs';
+var currentSite = 'favs';
 
-function changeSite(var changeTo) {
-	document.getElementById('content-view').src='./src/' + changeTo + '.html';
-	document.getElementsByClassName('button-' + changeFrom)[0].src='./img/test_button_n_pressed.png';
-	document.getElementsByClassName('button-' + changeTo)[0].src='./img/test_button_pressed.png';
-	changeFrom = changeTo;
+function changeSite(newSite) {
+	document.getElementById('content-view').src='./src/' + newSite + '.html';
+	document.getElementsByClassName('button-' + currentSite)[0].src='./img/test_button_n_pressed.png';
+	document.getElementsByClassName('button-' + newSite)[0].src='./img/test_button_pressed.png';
+	currentSite = newSite;
 }

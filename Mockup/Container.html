@@ -2,14 +2,14 @@
 <html id="main-container">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Mockup</title>
+	<script async="" src="./script/script.js"></script>
 	<link href="./style/style.css" rel="stylesheet">
+	<title>Mockup</title>
 </head>
 <body>
 	<div class="container">
 		<img class="android-title" src="./img/android_title.png">
 		<div class="pagination">
-
 			<img
 				class="navigator button-favs"
 				onclick="changeSite('favs')"
@@ -33,15 +33,5 @@
 		</div>
 		<iframe id="content-view" src="./src/favs.html" frameborder="0"></iframe>
 	</div>
-	<script>
-		var changeFrom = 'favs';
-
-		function changeSite(changeTo) {
-			document.getElementById('content-view').src='./src/' + changeTo + '.html';
-			document.getElementsByClassName('button-' + changeFrom)[0].src='./img/test_button_n_pressed.png';
-			document.getElementsByClassName('button-' + changeTo)[0].src='./img/test_button_pressed.png';
-			changeFrom = changeTo;
-		}
-	</script>
 </body>
 </html>
