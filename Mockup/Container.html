@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html id="main-container">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script type="text/javascript">
+		var changeFrom = 'favs';
+
+		function changeSite(var changeTo) {
+			document.getElementById('content-view').src='./src/' + changeTo + '.html';
+			document.getElementsByClassName('button-' + changeFrom)[0].src='./img/test_button_n_pressed.png';
+			document.getElementsByClassName('button-' + changeTo)[0].src='./img/test_button_pressed.png';
+			changeFrom = changeTo;
+		}
+	</script>
+	<title>Mockup</title>
+	<link href="./style/style.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<img class="android-title" src="./img/android_title.png">
+		<div class="pagination">
+
+			<img
+				class="navigator button-favs"
+				onclick="changeSite('favs')"
+				src="./img/test_button_pressed.png">
+			<img
+				class="navigator button-stops"
+				onclick="changeSite('stops')"
+				src="./img/test_button_n_pressed.png">
+			<img
+				class="navigator button-lines"
+				onclick="changeSite('lines')"
+				src="./img/test_button_n_pressed.png">
+			<img
+				class="navigator button-alerts"
+				onclick="changeSite('alerts')"
+				src="./img/test_button_n_pressed.png">
+			<img
+				class="navigator button-routes"
+				onclick="changeSite('routes')"
+				src="./img/test_button_n_pressed.png">
+		</div>
+		<iframe id="content-view" src="./src/favs.html" frameborder="0"></iframe>
+	</div>
+</body>
+</html>
