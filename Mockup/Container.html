@@ -2,16 +2,6 @@
 <html id="main-container">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script type="text/javascript">
-		var changeFrom = 'favs';
-
-		function changeSite(var changeTo) {
-			document.getElementById('content-view').src='./src/' + changeTo + '.html';
-			document.getElementsByClassName('button-' + changeFrom)[0].src='./img/test_button_n_pressed.png';
-			document.getElementsByClassName('button-' + changeTo)[0].src='./img/test_button_pressed.png';
-			changeFrom = changeTo;
-		}
-	</script>
 	<title>Mockup</title>
 	<link href="./style/style.css" rel="stylesheet">
 </head>
@@ -43,5 +33,15 @@
 		</div>
 		<iframe id="content-view" src="./src/favs.html" frameborder="0"></iframe>
 	</div>
+	<script>
+		var changeFrom = 'favs';
+
+		function changeSite(changeTo) {
+			document.getElementById('content-view').src='./src/' + changeTo + '.html';
+			document.getElementsByClassName('button-' + changeFrom)[0].src='./img/test_button_n_pressed.png';
+			document.getElementsByClassName('button-' + changeTo)[0].src='./img/test_button_pressed.png';
+			changeFrom = changeTo;
+		}
+	</script>
 </body>
 </html>
