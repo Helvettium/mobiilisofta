@@ -1,0 +1,18 @@
+@font-face {
+    font-family: robotoText;
+    src: url(./text/Roboto-Regular.ttf);
+}
+@font-face {
+    font-family: robotoText;
+    src: url(./text/Roboto-Bold.ttf);
+    font-weight: bold;
+}
+@font-face {
+    font-family: robotoText;
+    src: url(./text/Roboto-Italic.ttf);
+    font-style: italic;
+}
+@font-face {
+    font-family: amaranth;
+    src: url(./title/Amaranth-Regular.otf);
+}

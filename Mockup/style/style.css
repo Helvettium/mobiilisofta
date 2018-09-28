@@ -1,6 +1,29 @@
+@import url("./fonts/fonts.css");
+
+p, div, h1, h2, h3, h4, h5 {
+    font-family: robotoText;
+}
+
 #main-container {
 	width: 540px;
 	height: 960px;
+}
+
+.title-bar {
+	width: 540px;
+	height: 35px;
+}
+
+.title-text {
+  font-family: amaranth;
+	font-size: 28px;
+  float:left;
+}
+
+img.settings-navigator {
+	width: 35px;
+	height: 35px;
+	float: right;
 }
 
 div.container{
