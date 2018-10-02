@@ -1,19 +1,18 @@
 'use strict';
 
-window.addEventListener('load', () => {window.map = new Map()});
-
 class Map
 {
     constructor()
     {
         $('body').empty();
+
         this.$map = $('<div>', {'id': 'map'}).appendTo($('body'));
+        this.map = new google.maps.Map(this.$map.get(0), {'center': new google.maps.LatLng(61.502545, 23.807463), zoom: 16});
+
+        this.$map.height($(document).height() + 'px');
     }
 
-    mapCallback()
-    {
-        console.log('Map callback');
-    }
+
 }
 
 
