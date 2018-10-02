@@ -65,3 +65,11 @@ img.navigator {
 	height: 50px;
 	float: left
 }
+
+#mapIcon {
+    position: absolute;
+    top: 850px;
+    left: 430px;
+    width: 100px;
+    height: 100px;
+}
