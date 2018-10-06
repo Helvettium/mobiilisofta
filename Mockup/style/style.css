@@ -36,12 +36,14 @@ div.container{
 img.android-title {
 	width: 540px;
 	height: 35px;
+    display: block;
 }
 
 img.navigator {
 	width: 108px;
 	height: 50px;
 	float: left;
+    cursor: pointer;
 }
 
 .pagination {
@@ -72,10 +74,7 @@ img.navigator {
     left: 430px;
     width: 100px;
     height: 100px;
-}
-
-#map {
-    width: 100%;
+    cursor: pointer;
 }
 
 table {
