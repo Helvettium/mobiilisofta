@@ -1,0 +1,49 @@
+@import url('style.css');
+
+* {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+#map, #stop {
+    width: 100%;
+}
+
+#map {
+    height: 100%;
+}
+
+#stop {
+    height: 0px;
+    overflow-y: hidden;
+}
+
+#stop table {
+    border-collapse: collapse;
+}
+
+#stop th {
+    padding: 0px 6px;
+    text-align: left;
+    border-bottom: 1px solid #bbbbbb;
+    background-color: #ffffff;
+}
+
+#stop td {
+    padding: 0px 6px;
+}
+
+#stop td:last-child {
+    text-align: right;
+}
+
+#stop tr:nth-child(odd)
+{
+    background-color: #eeeeee;
+}
