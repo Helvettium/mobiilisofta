@@ -16,10 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Favourites"
-            android:label="@string/title_activity_favourites"
-            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".ViewPager"></activity>
     </application>
 
 </manifest>
