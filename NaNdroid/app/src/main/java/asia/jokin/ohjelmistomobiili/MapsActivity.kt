@@ -5,8 +5,11 @@ import android.os.Bundle
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.Circle
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
@@ -34,10 +37,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        val tampere = LatLng(61.4980214, 23.7603118)
+        mMap.mapType = MAP_TYPE_NORMAL
+        val clickableCircle = CircleOptions().center(tampere).clickable(true).visible(true).strokeColor(R.color.colorPrimary).radius(20.0)
+        mMap.addCircle(clickableCircle)
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        //mMap.addMarker(MarkerOptions().position(tampere).title("Marker in Tampere"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tampere, 16.0F))
     }
+
 }
+
