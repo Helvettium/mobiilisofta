@@ -12,7 +12,7 @@ class ViewPagerAdapter internal constructor(fm: FragmentManager) : FragmentPager
         var fragment: Fragment? = null
         when (position) {
             0 -> fragment = FavouritesFragment()
-            1 -> fragment = LinesFragment()
+            1 -> fragment = StopsFragment()
         }
 
         return fragment
@@ -26,7 +26,7 @@ class ViewPagerAdapter internal constructor(fm: FragmentManager) : FragmentPager
         var title: String? = null
         when (position) {
             0 -> title = "Favourites"
-            1 -> title = "Lines"
+            1 -> title = "Stops"
         }
         return title
     }
