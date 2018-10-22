@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-         // IDE kaski kayttaa getColor ja sit se on deprecated >:U
+         // TODO taustavari latausruuduksi
 
         // TODO tassa ladataan tiedot APIlta ja asetuksista
 
