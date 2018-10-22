@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_alerts"
+        android:icon="@drawable/ic_alert_glyph"
+        android:title="alerts"
+        app:showAsAction="always"/>
+
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/action_settings"
+        android:icon="@drawable/ic_cog_glyph"
+        android:title="settings"
+        app:showAsAction="always"/>
+</menu>
