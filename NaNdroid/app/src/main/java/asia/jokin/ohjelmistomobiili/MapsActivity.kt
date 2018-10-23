@@ -1,7 +1,9 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -40,11 +42,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val tampere = LatLng(61.4980214, 23.7603118)
         mMap.mapType = MAP_TYPE_NORMAL
         val clickableCircle = CircleOptions().center(tampere).clickable(true).visible(true).strokeColor(R.color.colorPrimary).radius(20.0)
-        mMap.addCircle(clickableCircle)
+        mMap.addCircle(clickableCircle).run{tag = "markertag"}
 
 
         //mMap.addMarker(MarkerOptions().position(tampere).title("Marker in Tampere"))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tampere, 16.0F))
+
+        with(mMap){
+            setOnCircleClickListener{
+                val startupIntent = Intent(this@MapsActivity, TempPopupActivity::class.java)
+                startActivity(startupIntent)
+            }
+        }
     }
 
 }
