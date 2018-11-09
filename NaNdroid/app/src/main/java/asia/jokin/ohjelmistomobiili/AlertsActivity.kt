@@ -15,7 +15,8 @@ class AlertsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alerts)
 
-        val exampleDataTable: Array<String> = arrayOf("Alert1","Alert2","Alert3","Alert4") // TODO REMOVE
+        val exampleDataTable: Array<String> = arrayOf("Alert1","Alert2","Alert3","Alert4")
+        // TODO REMOVE example data
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = AlertCardAdapter(exampleDataTable)

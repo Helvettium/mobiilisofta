@@ -44,8 +44,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val clickableCircle = CircleOptions().center(tampere).clickable(true).visible(true).strokeColor(R.color.colorPrimary).radius(20.0)
         mMap.addCircle(clickableCircle).run{tag = "markertag"}
 
+        /*
+        TODO tassa vain esimerkkikoodia, bussit tulevat valmiissa softassa toisaalle
+        johonkin funktioon, joka latautuu aina nakyman muuttuessa
 
-        //mMap.addMarker(MarkerOptions().position(tampere).title("Marker in Tampere"))
+        */
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tampere, 16.0F))
 
         with(mMap){

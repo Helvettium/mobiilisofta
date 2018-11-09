@@ -8,5 +8,7 @@ class TempPopupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_temp_popup)
+
+        // TODO poista koko paska, on vain mockupia varten
     }
 }

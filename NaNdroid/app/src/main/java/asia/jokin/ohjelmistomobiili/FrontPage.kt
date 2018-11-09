@@ -1,6 +1,5 @@
 package asia.jokin.ohjelmistomobiili
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,11 +7,8 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 
 class FrontPage : AppCompatActivity() {
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +29,6 @@ class FrontPage : AppCompatActivity() {
         }
 
     }
-
-
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_settings -> {

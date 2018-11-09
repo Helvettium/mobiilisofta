@@ -14,6 +14,7 @@ class StopsFragment : Fragment() {
         //val textView = view.findViewById<TextView>(R.id.txtMain)
         //textView.setText("In stops")
 
+        // TODO stops-koodi
 
         return view
     }

@@ -14,10 +14,12 @@ class MainActivity : AppCompatActivity() {
         val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
         ActivityCompat.requestPermissions(this, permissions,0)
 
-         // TODO taustavari latausruuduksi
+        // TODO taustavari latausruutuun
 
 
         // TODO tassa ladataan tiedot APIlta ja asetuksista
+
+        // TODO tuhoa tama aktiviteetti kun sirrytaan toiseen intentiin, ettei tahan voi palata
 
         val startupIntent = Intent(this, FrontPage::class.java)
         startActivity(startupIntent)
