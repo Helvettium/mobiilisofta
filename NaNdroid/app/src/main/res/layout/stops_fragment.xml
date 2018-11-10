@@ -104,7 +104,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/stopName2"
+                android:id="@+id/stopName3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/stopBusList"
+                android:id="@+id/stopBusList4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -136,7 +136,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/stopBusList2"
+                android:id="@+id/stopBusList5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -152,7 +152,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/stopBusList3"
+                android:id="@+id/stopBusList6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

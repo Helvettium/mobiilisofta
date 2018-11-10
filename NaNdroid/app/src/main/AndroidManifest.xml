@@ -47,8 +47,9 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".TempPopupActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert"></activity>
+        <activity
+            android:name=".PopupActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert" />
     </application>
 
 </manifest>

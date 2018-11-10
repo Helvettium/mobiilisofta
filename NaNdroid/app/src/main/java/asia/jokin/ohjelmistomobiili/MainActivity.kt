@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
 
         // TODO taustavari latausruutuun
 
-
         // TODO tassa ladataan tiedot APIlta ja asetuksista
 
         // TODO tuhoa tama aktiviteetti kun sirrytaan toiseen intentiin, ettei tahan voi palata
