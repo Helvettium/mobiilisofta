@@ -4,9 +4,11 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.ActivityCompat
 import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 
 class FrontPage : AppCompatActivity() {
 
@@ -20,7 +22,6 @@ class FrontPage : AppCompatActivity() {
             val startupIntent = Intent(this, MapsActivity::class.java)
             startActivity(startupIntent)
         }
-
 
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
         if (viewPager != null) {
