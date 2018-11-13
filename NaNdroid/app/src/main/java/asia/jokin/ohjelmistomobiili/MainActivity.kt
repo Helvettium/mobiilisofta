@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
         ActivityCompat.requestPermissions(this, permissions,0)
-
+        LocationSingleton.startLocationUpdates()
         if (!LocationSingleton.checkPermissionForLocation(this)){
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),10)
         } // TODO aktiviteetti ei jää odottamaan vastausta

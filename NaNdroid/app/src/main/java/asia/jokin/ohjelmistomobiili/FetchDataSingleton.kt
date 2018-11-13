@@ -1,18 +1,12 @@
-package asia.jokin.ohjelmistomobiili
-
-import android.app.Activity
-import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import java.util.ArrayList
-
+/*
 data class StopsData(val data1: String)
 data class LineData(val data1: String)
 data class StopData(val data1: String)
 
-object FetchDataSingleton : Activity(){
+@SuppressLint("StaticFieldLeak")
+object FetchDataSingleton{
+
+    private val appContext: Context = FetchDataSingleton
 
     private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=zx123&pass=qmF:L}h3wR2n"
     private var endUrl: String = ""
@@ -51,3 +45,4 @@ object FetchDataSingleton : Activity(){
         stopData.add(StopData(response))
     }
 }
+*/

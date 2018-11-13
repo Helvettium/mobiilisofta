@@ -29,6 +29,9 @@ class FrontPage : AppCompatActivity() {
             viewPager.adapter = adapter
         }
 
+
+        // TODO REMOVE
+        FetchDataSingleton.getStopData("Vanha")
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
