@@ -39,6 +39,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
+        // Default location values (keskustori)
+        val defLat: Double = intent.getDoubleExtra("lat", 61.497608)
+        val defLng: Double = intent.getDoubleExtra("lng", 23.760920)
+
+        
+
         val testLocation = LatLng(61.4970157, 23.7603225)
         val testMarker1 = LatLng(61.4980214, 23.7603118)
         val testMarker2 = LatLng(61.5040000, 23.7593000)
@@ -66,5 +73,45 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-}
 
+
+
+
+/*
+    @Override
+    public void onCameraMoveStarted(int reason) {
+
+        if (reason == OnCameraMoveStartedListener.REASON_GESTURE) {
+            Toast.makeText(this, "The user gestured on the map.",
+                           Toast.LENGTH_SHORT).show();
+        } else if (reason == OnCameraMoveStartedListener
+                                .REASON_API_ANIMATION) {
+            Toast.makeText(this, "The user tapped something on the map.",
+                           Toast.LENGTH_SHORT).show();
+        } else if (reason == OnCameraMoveStartedListener
+                                .REASON_DEVELOPER_ANIMATION) {
+            Toast.makeText(this, "The app moved the camera.",
+                           Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onCameraMove() {
+        Toast.makeText(this, "The camera is moving.",
+                       Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCameraMoveCanceled() {
+        Toast.makeText(this, "Camera movement canceled.",
+                       Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCameraIdle() {
+        Toast.makeText(this, "The camera has stopped moving.",
+                       Toast.LENGTH_SHORT).show();
+    }
+}
+*/
+}
