@@ -40,11 +40,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Default location values (keskustori)
-        val defLat: Double = intent.getDoubleExtra("lat", 61.497608)
-        val defLng: Double = intent.getDoubleExtra("lng", 23.760920)
-
         
+        // Default location values (keskustori)
+        val defLoc: Location = LocationSingleton.mLastLocation
+        val defLat: Double = intent.getDoubleExtra("lat", defLoc.getLatitude())
+        val defLng: Double = intent.getDoubleExtra("lng", defLoc.getLongitude())
+
+
+
 
         val testLocation = LatLng(61.4970157, 23.7603225)
         val testMarker1 = LatLng(61.4980214, 23.7603118)
@@ -64,10 +67,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         */
         // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testLocation, 16.0F))
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(defLat, defLng)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(defLat, defLng)))
 
-        with(mMap){
-            setOnCircleClickListener{
+        with(mMap) {
+            setOnCircleClickListener {
                 val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
                 popupIntent.putExtra("name", it.tag.toString())
                 startActivity(popupIntent)
