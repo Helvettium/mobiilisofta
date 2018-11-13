@@ -15,11 +15,8 @@ import java.util.List;
 
 public class FetchDataJavaSingleton {
     private static FetchDataJavaSingleton ourInstance = null;
-    private double lng = 0.0;
-    private double lat = 0.0;
-    private String units = "metric";
     private static Context appContext;
-    private String urlString = "http://api.openweathermap.org/data/2.5/forecast?";
+    private String urlString = "http://api.publictransport.tampere.fi/prod/?user=zx123&pass=qmF:L}h3wR2n";
     static FetchDataJavaSingleton getInstance(Context context) {
         appContext = context;
         if( ourInstance == null ){
@@ -40,27 +37,26 @@ public class FetchDataJavaSingleton {
     }
     //public List<WeatherForecast> getWeatherForecast( int latitude, int longitude ){ return weatherForecast; }
 
-    public void setCoordinates(double latitude, double longitude, String unit){
-        if (latitude != 0.0){
-            lat = latitude;
-            lng = longitude;
-            units = unit;
+    public void getStopsData(String locationLatitude, String locationLongitude){
 
-            urlString = "http://api.openweathermap.org/data/2.5/forecast?"
-                    +"lat=" +latitude
-                    +"&lon=" +longitude
-                    +"&units="+unit
-                    +"&appid=f826a6642b2ec59952540192647110bb";
-        }
+}
+
+    public void getLineData(String locationLatitude, String locationLongitude){
+
     }
 
-    public void getAnyDataFromServer() {
+    public void getStopData(String locationName){
+        String searchTerm = "&code="+locationName;
+        fetchData(searchTerm);
+    }
+
+    public void fetchData(String searchTerm) {
         /*
          * Requesting weather information from API
          */
         RequestQueue queue = Volley.newRequestQueue(appContext);
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString+searchTerm,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

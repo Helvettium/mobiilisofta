@@ -12,6 +12,7 @@ import android.widget.Toast
 
 class FrontPage : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_front_page)
@@ -29,9 +30,7 @@ class FrontPage : AppCompatActivity() {
             viewPager.adapter = adapter
         }
 
-
         // TODO REMOVE
-        FetchDataSingleton.getStopData("Vanha")
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
