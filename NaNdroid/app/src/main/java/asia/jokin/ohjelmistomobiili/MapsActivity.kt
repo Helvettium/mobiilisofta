@@ -62,7 +62,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         johonkin funktioon, joka latautuu aina nakyman muuttuessa
 
         */
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testLocation, 16.0F))
+        // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testLocation, 16.0F))
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(defLat, defLng)));
 
         with(mMap){
             setOnCircleClickListener{
