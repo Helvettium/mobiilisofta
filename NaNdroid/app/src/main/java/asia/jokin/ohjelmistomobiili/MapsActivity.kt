@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+    private var fetchManager = FetchDataSingleton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,14 +44,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         
         // Default location values (keskustori)
-        val defLoc: Location = LocationSingleton.mLastLocation
-        val defLat: Double = intent.getDoubleExtra("lat", defLoc.getLatitude())
-        val defLng: Double = intent.getDoubleExtra("lng", defLoc.getLongitude())
+
+        // val defLoc: Location = LocationSingleton.mLastLocation
+        // val defLat: Double = intent.getDoubleExtra("lat", defLoc.getLatitude())
+        // val defLng: Double = intent.getDoubleExtra("lng", defLoc.getLongitude())
 
 
 
 
-        val testLocation = LatLng(61.4970157, 23.7603225)
+        val testLocation = LatLng(68.2385257, 33.3181025)
         val testMarker1 = LatLng(61.4980214, 23.7603118)
         val testMarker2 = LatLng(61.5040000, 23.7593000)
         val testMarker3 = LatLng(61.4960214, 23.7599118)
@@ -61,14 +63,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addCircle(clickableCircle2).run{tag = "circle 2"}
         mMap.addCircle(clickableCircle3).run{tag = "circle 3"}
 
+        fetchManager.getInstance(this.applicationContext).getStopsData(testLocation)
+
         /*
         TODO tassa vain esimerkkikoodia, bussit tulevat valmiissa softassa toisaalle
         johonkin funktioon, joka latautuu aina nakyman muuttuessa
 
         */
-        // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testLocation, 16.0F))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testLocation, 16.0F))
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(defLat, defLng)))
+        // mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(defLat, defLng)))
 
         with(mMap) {
             setOnCircleClickListener {

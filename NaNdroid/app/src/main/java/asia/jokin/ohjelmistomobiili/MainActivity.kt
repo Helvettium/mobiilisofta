@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
         val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
         ActivityCompat.requestPermissions(this, permissions,0)
         
-        if (!LocationSingleton.checkPermissionForLocation(this)){
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),10)
+        if (!LocationSingleton.checkPermissionForLocation(this)) {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 10)
         } // TODO aktiviteetti ei jää odottamaan vastausta
 
 
