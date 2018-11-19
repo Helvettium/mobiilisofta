@@ -132,20 +132,17 @@ class FetchDataSingleton private constructor(context: Context) {
 
         FetchDataSingleton.getInstance(context).getStopsData(latlng, object: DataCallback{ //make a getStopsData call
             override fun onSuccess(stops: JSONArray, context: Context) {
-                var i = 0
-                while (i < numberOfStops-1) { //loop through the first 5 stops in response
+                for (i in 0..numberOfStops*2) { //loop through the first 5 stops in response
                     val item = stops.getJSONObject(i) //get JSONObject in position i
-                    if (item.isNull("departures")){
-                        val stopcode = item.get("code").toString().toInt() //get code value from item
-                        FetchDataSingleton.getInstance(context).getStopData(stopcode, object : DataCallback { //make a getStopData call for given stopcode
-                            override fun onSuccess(stop: JSONArray, context: Context) {
+                    val stopcode = item.get("code").toString().toInt() //get code value from item
+                    FetchDataSingleton.getInstance(context).getStopData(stopcode, object : DataCallback { //make a getStopData call for given stopcode
+                        override fun onSuccess(stop: JSONArray, context: Context) {
+                            if (stop.getJSONObject(0).get("departures")!="")
                                 stopsData.put(stop.getJSONObject(0)) //put the received data to a JSONArray
-                                if (stopsData.length() == numberOfStops)
-                                    callback.onSuccess(stopsData, context) //call callback when there are 5 objects in array
-                            }
-                        })
-                        i += 1
-                    }
+                            if (stopsData.length() == numberOfStops)
+                                callback.onSuccess(stopsData, context) //call callback when there are 5 objects in array
+                        }
+                    })
                 }
             }
         })
