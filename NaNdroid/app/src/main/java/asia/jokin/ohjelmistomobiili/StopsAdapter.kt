@@ -1,7 +1,5 @@
 package asia.jokin.ohjelmistomobiili
 
-import android.os.Parcel
-import android.os.Parcelable
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -22,7 +20,7 @@ class StopsAdapter (private val inputData: Array<String>):
     override fun onBindViewHolder(holder: StopsAdapter.MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.cardView.findViewById<TextView>(R.id.cardStopName).text = inputData[position]
+        holder.cardView.findViewById<TextView>(R.id.stopName).text = inputData[position]
     }
 
     // Provide a reference to the views for each data item

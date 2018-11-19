@@ -31,7 +31,7 @@ class AlertCardAdapter (private val inputData: Array<String>):
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.cardView.findViewById<TextView>(R.id.cardStopName).text = inputData[position]
+        holder.cardView.findViewById<TextView>(R.id.stopName).text = inputData[position]
     }
 
     // Return the size of your dataset (invoked by the layout manager)
