@@ -59,9 +59,9 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
 
         val cardContent:ConstraintLayout = holder.cardView.findViewById(R.id.stopContent)
         cardContent.setOnClickListener {
-            //val clickIntent = Intent(appContext, MapsActivity::class.java)
-
-            //startActivity(clickIntent)
+            val clickIntent = Intent(appContext, MapsActivity::class.java)
+            clickIntent.putExtra("stopid", responseData.getString("code").toInt())
+            appContext.startActivity(clickIntent)
         }
     }
 
