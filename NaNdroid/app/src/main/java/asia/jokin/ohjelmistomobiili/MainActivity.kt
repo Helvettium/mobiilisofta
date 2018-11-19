@@ -1,9 +1,12 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
 
         // TODO taustavari latausruutuun
-
+        checkPermission()
         // TODO tassa ladataan tiedot APIlta ja asetuksista
 
         // TODO tuhoa tama aktiviteetti kun sirrytaan toiseen intentiin, ettei tahan voi palata
@@ -28,4 +31,13 @@ class MainActivity : AppCompatActivity() {
         startActivity(startupIntent) // TODO uncomment
     }
 
+    private fun checkPermission(){
+        val permission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO)
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // mita jos ei anna lupaa
+        }
+
+    }
 }

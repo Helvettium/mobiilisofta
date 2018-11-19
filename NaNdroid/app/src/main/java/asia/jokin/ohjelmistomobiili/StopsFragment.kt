@@ -15,7 +15,7 @@ import org.json.JSONArray
 
 class StopsFragment : Fragment() {
 
-    private val testLocation: LatLng = LatLng(68.2554300, 33.2764400)
+    private val testLocation: LatLng = LatLng(61.4975568, 23.7603378)
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -30,7 +30,7 @@ class StopsFragment : Fragment() {
         val exampleDataTable: Array<String> = arrayOf("Stop 1","Stop 2","Stop 3","Stop 4") // TODO remove
         val fetchedData: Array<String>
 
-        fetchManager.getInstance(activity!!.application).getStopsData(testLocation, object: DataCallback{
+        fetchManager.getInstance(activity!!.application).getFiveClosestStops(testLocation, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
             }
