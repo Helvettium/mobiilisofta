@@ -16,15 +16,15 @@ class FavouritesFragment : Fragment() {
         //textView.setText("In Favourites")
 
         // TODO favourites sisalto
-
+        /*
         val btnPopup = view.findViewById<Button>(R.id.btnPopup)
 
-        btnPopup.setOnClickListener(){
+        btnPopup.setOnClickListener {
             val popupIntent = Intent(activity, PopupActivity::class.java)
             popupIntent.putExtra("stopcode", "0035")
             startActivity(popupIntent)
         }
-
+        */
         return view
     }
 }
