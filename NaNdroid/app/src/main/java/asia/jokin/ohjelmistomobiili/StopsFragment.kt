@@ -28,14 +28,14 @@ class StopsFragment : Fragment() {
 
         viewManager = LinearLayoutManager(activity)
 
-        fetchManager.getInstance(activity!!.application).getFiveClosestStops(testLocation, object: DataCallback{
+        fetchManager.getInstance(activity!!.applicationContext).getFiveClosestStops(testLocation, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 val fetchedData: ArrayList<String> = ArrayList()
                 for (i in (0 until response.length())) {
 
                     fetchedData.add(response[i].toString())
                 }
-                viewAdapter = StopsAdapter(fetchedData)
+                viewAdapter = StopsAdapter(fetchedData,activity!!.applicationContext)
 
                 recyclerView = view.findViewById<RecyclerView>(R.id.stopsRecycle).apply {
                     // use this setting to improve performance if you know that changes

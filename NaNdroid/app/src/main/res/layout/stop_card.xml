@@ -14,7 +14,7 @@
     android:focusable="true">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/StopContent"
+        android:id="@+id/stopContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

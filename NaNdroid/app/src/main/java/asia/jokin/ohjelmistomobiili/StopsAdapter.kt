@@ -1,15 +1,22 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.content.Context
+import android.content.Intent
+import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import org.json.JSONArray
 import org.json.JSONObject
 
-class StopsAdapter (private val inputData: ArrayList<String>):
+class StopsAdapter (private val inputData: ArrayList<String>, classContext: Context):
         RecyclerView.Adapter<StopsAdapter.MyViewHolder>() {
+    private val appContext: Context = classContext
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StopsAdapter.MyViewHolder {
         // create a new view
         val cardView = LayoutInflater.from(parent.context)
@@ -23,10 +30,9 @@ class StopsAdapter (private val inputData: ArrayList<String>):
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         val responseData = JSONObject(inputData[position])
+        val departureDataString: String = responseData.getString("departures")
 
-        val departureDataString: String = responseData.getString("departures") // ?? kaatuu
-
-        if (departureDataString!=""&&responseData.length() == 5) {
+        if (departureDataString!=""&&inputData.size == 5) {
             val departureData: JSONArray = responseData.getJSONArray("departures")
             val dataBus1: JSONObject = departureData.getJSONObject(0)
             val dataBus2: JSONObject = departureData.getJSONObject(1)
@@ -51,6 +57,12 @@ class StopsAdapter (private val inputData: ArrayList<String>):
         }
         holder.cardView.findViewById<TextView>(R.id.stopName).text = responseData.getString("name_fi")
 
+        val cardContent:ConstraintLayout = holder.cardView.findViewById(R.id.stopContent)
+        cardContent.setOnClickListener {
+            //val clickIntent = Intent(appContext, MapsActivity::class.java)
+
+            //startActivity(clickIntent)
+        }
     }
 
     // Provide a reference to the views for each data item
