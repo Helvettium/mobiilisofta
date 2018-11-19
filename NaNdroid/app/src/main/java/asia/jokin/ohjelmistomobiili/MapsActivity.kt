@@ -24,7 +24,6 @@ import org.json.JSONArray
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-    private var fetchManager = FetchDataSingleton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addCircle(clickableCircle2).run{tag = "circle 2"}
         mMap.addCircle(clickableCircle3).run{tag = "circle 3"}
 
-        fetchManager.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
+        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 // Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
                 // do stuff with response

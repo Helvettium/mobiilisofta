@@ -47,7 +47,7 @@ class FetchDataSingleton private constructor(context: Context) {
     fun getStopsData(latlng: LatLng? = LatLng(61.4980000, 23.7604000), callback: DataCallback){
         /*
         USAGE:
-        fetchManager.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
+        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 // Do stuff
             }
@@ -76,7 +76,7 @@ class FetchDataSingleton private constructor(context: Context) {
     fun getStopData(stopcode: Int, callback: DataCallback){
         /*
         USAGE:
-        fetchManager.getInstance(this.applicationContext).getStopsData(stopcode, object: DataCallback{
+        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(stopcode, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 // Do stuff
             }
@@ -99,7 +99,7 @@ class FetchDataSingleton private constructor(context: Context) {
     fun getLineData(line: String, callback: DataCallback){
         /*
         USAGE:
-        fetchManager.getInstance(this.applicationContext).getStopsData(line, object: DataCallback{
+        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(line, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 // Do stuff
             }
@@ -119,7 +119,40 @@ class FetchDataSingleton private constructor(context: Context) {
         queue.add(jsonArrayRequest)
     }
 
-    //TODO muut data haut
+    fun getFiveClosestStops(latlng: LatLng? = LatLng(61.4980000, 23.7604000), callback: DataCallback) {
+        /*
+        USAGE:
+        FetchDataSingleton.getInstance(this.applicationContext).getFiveClosestStops(testLocation, object: DataCallback{
+            override fun onSuccess(response: JSONArray, context: Context) {
+                // Do stuff
+            }
+        })
+        */
+        //make a getStopsData call
+        var stopsData: JSONArray = JSONArray() //JSONArray for the return value
+        val numberOfStops = 5
+
+        FetchDataSingleton.getInstance(context).getStopsData(latlng, object: DataCallback{
+            override fun onSuccess(stops: JSONArray, context: Context) {
+                //loop through the first 5 stops in response
+                for (i in 0..numberOfStops-1) {
+                    //get JSONObject in position i
+                    val item = stops.getJSONObject(i)
+                    //get code value from item
+                    val stopcode = item.get("code").toString().toInt()
+                    //make a getStopData call for given stopcode
+                    FetchDataSingleton.getInstance(context).getStopData(stopcode, object: DataCallback{
+                        override fun onSuccess(stop: JSONArray, context: Context) {
+                            //put the received data to a JSONArray
+                            stopsData.put(stop.getJSONObject(0))
+                            if (stopsData.length() == numberOfStops)
+                                callback.onSuccess(stopsData, context) //call callback when there are 5 objects in array
+                        }
+                    })
+                }
+            }
+        })
+    }
 
     companion object : SingletonHolder<FetchDataSingleton, Context>(::FetchDataSingleton)
 }
