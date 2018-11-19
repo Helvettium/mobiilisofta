@@ -32,6 +32,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // TODO REMOVE v
+        val stopid: Int = intent.extras.getInt("stopid",0)
+        if (0!=stopid){
+            val popupIntent = Intent(this, PopupActivity::class.java)
+            popupIntent.putExtra("stopcode", stopid.toString())
+            startActivity(popupIntent)
+        }
+        // TODO REMOVE ^
     }
 
     /**
