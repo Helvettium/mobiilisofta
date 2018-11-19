@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.model.LatLng
+import org.json.JSONArray
 
 open class SingletonHolder<out T, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator
@@ -37,24 +38,25 @@ open class SingletonHolder<out T, in A>(creator: (A) -> T) {
 }
 
 class FetchDataSingleton private constructor(context: Context) {
-    //used with FetchDataSingleton.getInstance(this.applicationContext).doStuff()
-
-    var context: Context
+    private var context: Context
+    private val queue = Volley.newRequestQueue(context)
     private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=zx123&pass=qmF:L}h3wR2n"
+    private var data: JSONArray = JSONArray()
 
     init {
         // Init using context argument
         this.context = context
     }
 
-    fun hello() {
-        Toast.makeText(context, "Hello",
-                Toast.LENGTH_SHORT).show();
-    }
-
-    fun getStopsData(latlng: LatLng? = LatLng(0.0, 0.0)){
-        val queue = Volley.newRequestQueue(context)
-
+    fun getStopsData(latlng: LatLng? = LatLng(68.2554300, 33.2764400), callback: DataCallback){
+        /*
+        USAGE:
+        fetchManager.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
+            override fun onSuccess(response: JSONArray, context: Context) {
+                // Do stuff
+            }
+        })
+        */
         var lat = latlng.toString()
         lat = lat.substringAfter("(")
         lat = lat.substring(0,8)
@@ -65,17 +67,61 @@ class FetchDataSingleton private constructor(context: Context) {
         lng = lng.substring(0,8)
         lng = lng.replace(".", "")
 
-
-        val requestUrl = "$BASE_URL&request=stops_area&center_coordinate=$lng,$lat&diameter=1000"
+        val requestUrl = "$BASE_URL&request=stops_area&center_coordinate=$lng,$lat&diameter=1000&p=1101"
 
         val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
                 Response.Listener { response ->
-                    // Display the response in a toast
-                     Toast.makeText(context, response.toString(),
-                            Toast.LENGTH_LONG).show();
+                    callback.onSuccess(response, context)
                 },
-                Response.ErrorListener { response -> Toast.makeText(context, response.toString(),
-                        Toast.LENGTH_LONG).show(); })
+                Response.ErrorListener { response ->
+                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                })
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonArrayRequest)
+    }
+
+    fun getStopData(stopcode: Int, callback: DataCallback){
+        /*
+        USAGE:
+        fetchManager.getInstance(this.applicationContext).getStopsData(stopcode, object: DataCallback{
+            override fun onSuccess(response: JSONArray, context: Context) {
+                // Do stuff
+            }
+        })
+        */
+        val requestUrl = "$BASE_URL&request=stop&code=$stopcode&p=10101010001"
+
+        val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
+                Response.Listener { response ->
+                    callback.onSuccess(response, context)
+                },
+                Response.ErrorListener { response ->
+                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                })
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonArrayRequest)
+    }
+
+    fun getLineData(line: String, callback: DataCallback){
+        /*
+        USAGE:
+        fetchManager.getInstance(this.applicationContext).getStopsData(line, object: DataCallback{
+            override fun onSuccess(response: JSONArray, context: Context) {
+                // Do stuff
+            }
+        })
+        */
+        val requestUrl = "$BASE_URL&request=lines&p=100111011&query=$line"
+
+        val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
+                Response.Listener { response ->
+                    callback.onSuccess(response, context)
+                },
+                Response.ErrorListener { response ->
+                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                })
 
         // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest)
