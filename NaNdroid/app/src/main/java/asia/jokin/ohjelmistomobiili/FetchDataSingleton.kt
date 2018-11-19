@@ -135,15 +135,17 @@ class FetchDataSingleton private constructor(context: Context) {
                 var i = 0
                 while (i < numberOfStops-1) { //loop through the first 5 stops in response
                     val item = stops.getJSONObject(i) //get JSONObject in position i
-                    val stopcode = item.get("code").toString().toInt() //get code value from item
-                    FetchDataSingleton.getInstance(context).getStopData(stopcode, object : DataCallback { //make a getStopData call for given stopcode
-                        override fun onSuccess(stop: JSONArray, context: Context) {
-                            stopsData.put(stop.getJSONObject(0)) //put the received data to a JSONArray
-                            if (stopsData.length() == numberOfStops)
-                                callback.onSuccess(stopsData, context) //call callback when there are 5 objects in array
-                        }
-                    })
-                    i += 1
+                    if (item.isNull("departures")){
+                        val stopcode = item.get("code").toString().toInt() //get code value from item
+                        FetchDataSingleton.getInstance(context).getStopData(stopcode, object : DataCallback { //make a getStopData call for given stopcode
+                            override fun onSuccess(stop: JSONArray, context: Context) {
+                                stopsData.put(stop.getJSONObject(0)) //put the received data to a JSONArray
+                                if (stopsData.length() == numberOfStops)
+                                    callback.onSuccess(stopsData, context) //call callback when there are 5 objects in array
+                            }
+                        })
+                        i += 1
+                    }
                 }
             }
         })
