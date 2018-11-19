@@ -26,7 +26,7 @@ class StopsAdapter (private val inputData: ArrayList<String>):
 
         val departureDataString: String = responseData.getString("departures") // ?? kaatuu
 
-        if (departureDataString!="") {
+        if (departureDataString!=""&&responseData.length() == 5) {
             val departureData: JSONArray = responseData.getJSONArray("departures")
             val dataBus1: JSONObject = departureData.getJSONObject(0)
             val dataBus2: JSONObject = departureData.getJSONObject(1)
@@ -43,11 +43,11 @@ class StopsAdapter (private val inputData: ArrayList<String>):
             holder.cardView.findViewById<TextView>(R.id.stopBusNr3).text = dataBus3.getString("code")
             holder.cardView.findViewById<TextView>(R.id.stopBusNr4).text = dataBus4.getString("code")
             holder.cardView.findViewById<TextView>(R.id.stopBusNr5).text = dataBus5.getString("code")
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival1).text = dataBus1.getString("time")
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival2).text = dataBus2.getString("time")
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival3).text = dataBus3.getString("time")
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival4).text = dataBus4.getString("time")
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival5).text = dataBus5.getString("time")
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival1).text = parseTime(dataBus1.getString("time"))
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival2).text = parseTime(dataBus2.getString("time"))
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival3).text = parseTime(dataBus3.getString("time"))
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival4).text = parseTime(dataBus4.getString("time"))
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival5).text = parseTime(dataBus5.getString("time"))
         }
         holder.cardView.findViewById<TextView>(R.id.stopName).text = responseData.getString("name_fi")
 
@@ -59,7 +59,9 @@ class StopsAdapter (private val inputData: ArrayList<String>):
     // Each data item is just a string in this case that is shown in a TextView.
     class MyViewHolder(val cardView: CardView) : RecyclerView.ViewHolder(cardView)
 
-
+    private fun parseTime(timeString: String): String {
+        return timeString.substring(0,2)+":"+timeString.substring(2)
+    }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = inputData.size
