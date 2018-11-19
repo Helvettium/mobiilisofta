@@ -15,6 +15,11 @@ import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import org.json.JSONObject
+import android.R.attr.password
+import android.content.Context
+import org.json.JSONArray
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -52,7 +57,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-        val testLocation = LatLng(68.2385257, 33.3181025)
+        val testLocation = LatLng(68.2554300, 33.2764400)
         val testMarker1 = LatLng(61.4980214, 23.7603118)
         val testMarker2 = LatLng(61.5040000, 23.7593000)
         val testMarker3 = LatLng(61.4960214, 23.7599118)
@@ -63,7 +68,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addCircle(clickableCircle2).run{tag = "circle 2"}
         mMap.addCircle(clickableCircle3).run{tag = "circle 3"}
 
-        fetchManager.getInstance(this.applicationContext).getStopsData(testLocation)
+        fetchManager.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
+            override fun onSuccess(response: JSONArray, context: Context) {
+                Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+            }
+        })
 
         /*
         TODO tassa vain esimerkkikoodia, bussit tulevat valmiissa softassa toisaalle
