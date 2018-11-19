@@ -1,14 +1,10 @@
 package asia.jokin.ohjelmistomobiili
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.model.LatLng
 import org.json.JSONArray
@@ -40,7 +36,7 @@ open class SingletonHolder<out T, in A>(creator: (A) -> T) {
 class FetchDataSingleton private constructor(context: Context) {
     private var context: Context
     private val queue = Volley.newRequestQueue(context)
-    private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=zx123&pass=qmF:L}h3wR2n"
+    private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=zx123&pass=qmF:L}h3wR2n&&epsg_in=4326&epsg_out=4326"
     private var data: JSONArray = JSONArray()
 
     init {
@@ -48,7 +44,7 @@ class FetchDataSingleton private constructor(context: Context) {
         this.context = context
     }
 
-    fun getStopsData(latlng: LatLng? = LatLng(68.2554300, 33.2764400), callback: DataCallback){
+    fun getStopsData(latlng: LatLng? = LatLng(61.4980000, 23.7604000), callback: DataCallback){
         /*
         USAGE:
         fetchManager.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
@@ -58,16 +54,12 @@ class FetchDataSingleton private constructor(context: Context) {
         })
         */
         var lat = latlng.toString()
-        lat = lat.substringAfter("(")
-        lat = lat.substring(0,8)
-        lat = lat.replace(".", "")
+        lat = lat.substringAfterLast("(", ")")
+        lat = lat.dropLast(1)
+        var lng = lat.substringAfter(",")
+        lat = lat.substringBefore(",")
 
-        var lng = latlng.toString()
-        lng = lng.substringAfter(",")
-        lng = lng.substring(0,8)
-        lng = lng.replace(".", "")
-
-        val requestUrl = "$BASE_URL&request=stops_area&center_coordinate=$lng,$lat&diameter=1000&p=1101"
+        val requestUrl = "$BASE_URL&request=stops_area&diameter=1000&p=1101&center_coordinate=$lng,$lat"
 
         val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
                 Response.Listener { response ->
@@ -90,7 +82,7 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        val requestUrl = "$BASE_URL&request=stop&code=$stopcode&p=10101010001"
+        val requestUrl = "$BASE_URL&request=stop&p=10101010001&code=$stopcode"
 
         val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
                 Response.Listener { response ->
