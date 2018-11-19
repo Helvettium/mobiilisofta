@@ -57,7 +57,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-        val testLocation = LatLng(68.2554300, 33.2764400)
+        val testLocation = LatLng(61.4980000, 23.7604000)
         val testMarker1 = LatLng(61.4980214, 23.7603118)
         val testMarker2 = LatLng(61.5040000, 23.7593000)
         val testMarker3 = LatLng(61.4960214, 23.7599118)
@@ -70,7 +70,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fetchManager.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
-                Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                // Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                // do stuff with response
             }
         })
 
