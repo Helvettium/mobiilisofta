@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="4dp"
-            android:stretchColumns="0,1"
+            android:stretchColumns="1"
             card_view:layout_constraintTop_toBottomOf="@+id/stopName">
 
             <TableRow
@@ -44,10 +44,16 @@
                 android:background="@color/lightGrey">
 
                 <TextView
+                    android:id="@+id/stopBusNr1"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+
+                <TextView
                     android:id="@+id/stopBusDest1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 Keskustori" />
+                    android:text="Keskustori" />
 
                 <TextView
                     android:id="@+id/stopBusArrival1"
@@ -63,10 +69,16 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/stopBusNr2"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+
+                <TextView
                     android:id="@+id/stopBusDest2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 Keskustori" />
+                    android:text="Keskustori" />
 
                 <TextView
                     android:id="@+id/stopBusArrival2"
@@ -83,10 +95,16 @@
                 android:background="@color/lightGrey">
 
                 <TextView
+                    android:id="@+id/stopBusNr3"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+
+                <TextView
                     android:id="@+id/stopBusDest3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 Keskustori" />
+                    android:text="Keskustori" />
 
                 <TextView
                     android:id="@+id/stopBusArrival3"
@@ -102,10 +120,16 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/stopBusNr4"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+
+                <TextView
                     android:id="@+id/stopBusDest4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 Keskustori" />
+                    android:text="Keskustori" />
 
                 <TextView
                     android:id="@+id/stopBusArrival4"
@@ -122,10 +146,16 @@
                 android:background="@color/lightGrey">
 
                 <TextView
+                    android:id="@+id/stopBusNr5"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+
+                <TextView
                     android:id="@+id/stopBusDest5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 Keskustori" />
+                    android:text="Keskustori" />
 
                 <TextView
                     android:id="@+id/stopBusArrival5"

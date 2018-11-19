@@ -5,8 +5,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import org.json.JSONArray
+import org.json.JSONObject
 
-class StopsAdapter (private val inputData: Array<String>):
+class StopsAdapter (private val inputData: ArrayList<String>):
         RecyclerView.Adapter<StopsAdapter.MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StopsAdapter.MyViewHolder {
         // create a new view
@@ -20,7 +22,35 @@ class StopsAdapter (private val inputData: Array<String>):
     override fun onBindViewHolder(holder: StopsAdapter.MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.cardView.findViewById<TextView>(R.id.stopName).text = inputData[position]
+        val responseData = JSONObject(inputData[position])
+
+        val departureDataString: String = responseData.getString("departures") // ?? kaatuu
+
+        if (departureDataString!="") {
+            val departureData: JSONArray = responseData.getJSONArray("departures")
+            val dataBus1: JSONObject = departureData.getJSONObject(0)
+            val dataBus2: JSONObject = departureData.getJSONObject(1)
+            val dataBus3: JSONObject = departureData.getJSONObject(2)
+            val dataBus4: JSONObject = departureData.getJSONObject(3)
+            val dataBus5: JSONObject = departureData.getJSONObject(4)
+            holder.cardView.findViewById<TextView>(R.id.stopBusDest1).text = dataBus1.getString("name1")
+            holder.cardView.findViewById<TextView>(R.id.stopBusDest2).text = dataBus2.getString("name1")
+            holder.cardView.findViewById<TextView>(R.id.stopBusDest3).text = dataBus3.getString("name1")
+            holder.cardView.findViewById<TextView>(R.id.stopBusDest4).text = dataBus4.getString("name1")
+            holder.cardView.findViewById<TextView>(R.id.stopBusDest5).text = dataBus5.getString("name1")
+            holder.cardView.findViewById<TextView>(R.id.stopBusNr1).text = dataBus1.getString("code")
+            holder.cardView.findViewById<TextView>(R.id.stopBusNr2).text = dataBus2.getString("code")
+            holder.cardView.findViewById<TextView>(R.id.stopBusNr3).text = dataBus3.getString("code")
+            holder.cardView.findViewById<TextView>(R.id.stopBusNr4).text = dataBus4.getString("code")
+            holder.cardView.findViewById<TextView>(R.id.stopBusNr5).text = dataBus5.getString("code")
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival1).text = dataBus1.getString("time")
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival2).text = dataBus2.getString("time")
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival3).text = dataBus3.getString("time")
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival4).text = dataBus4.getString("time")
+            holder.cardView.findViewById<TextView>(R.id.stopBusArrival5).text = dataBus5.getString("time")
+        }
+        holder.cardView.findViewById<TextView>(R.id.stopName).text = responseData.getString("name_fi")
+
     }
 
     // Provide a reference to the views for each data item
