@@ -37,7 +37,6 @@ class FetchDataSingleton private constructor(context: Context) {
     private var context: Context
     private val queue = Volley.newRequestQueue(context)
     private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=zx123&pass=qmF:L}h3wR2n&&epsg_in=4326&epsg_out=4326"
-    private var data: JSONArray = JSONArray()
 
     init {
         // Init using context argument
@@ -66,7 +65,7 @@ class FetchDataSingleton private constructor(context: Context) {
                     callback.onSuccess(response, context)
                 },
                 Response.ErrorListener { response ->
-                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                    // Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
                 })
 
         // Add the request to the RequestQueue.
@@ -82,7 +81,7 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        val requestUrl = "$BASE_URL&request=stop&p=10101010001&code=$stopcode"
+        val requestUrl = "$BASE_URL&request=stop&p=10101011001&code=$stopcode"
 
         val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
                 Response.Listener { response ->
@@ -128,27 +127,23 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        //make a getStopsData call
-        var stopsData: JSONArray = JSONArray() //JSONArray for the return value
-        val numberOfStops = 5
+        var stopsData = JSONArray() //JSONArray for the return value
+        val numberOfStops = 5 //number of stops for the array
 
-        FetchDataSingleton.getInstance(context).getStopsData(latlng, object: DataCallback{
+        FetchDataSingleton.getInstance(context).getStopsData(latlng, object: DataCallback{ //make a getStopsData call
             override fun onSuccess(stops: JSONArray, context: Context) {
-                //loop through the first 5 stops in response
-                for (i in 0..numberOfStops-1) {
-                    //get JSONObject in position i
-                    val item = stops.getJSONObject(i)
-                    //get code value from item
-                    val stopcode = item.get("code").toString().toInt()
-                    //make a getStopData call for given stopcode
-                    FetchDataSingleton.getInstance(context).getStopData(stopcode, object: DataCallback{
+                var i = 0
+                while (i < numberOfStops-1) { //loop through the first 5 stops in response
+                    val item = stops.getJSONObject(i) //get JSONObject in position i
+                    val stopcode = item.get("code").toString().toInt() //get code value from item
+                    FetchDataSingleton.getInstance(context).getStopData(stopcode, object : DataCallback { //make a getStopData call for given stopcode
                         override fun onSuccess(stop: JSONArray, context: Context) {
-                            //put the received data to a JSONArray
-                            stopsData.put(stop.getJSONObject(0))
+                            stopsData.put(stop.getJSONObject(0)) //put the received data to a JSONArray
                             if (stopsData.length() == numberOfStops)
                                 callback.onSuccess(stopsData, context) //call callback when there are 5 objects in array
                         }
                     })
+                    i += 1
                 }
             }
         })

@@ -86,7 +86,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         with(mMap) {
             setOnCircleClickListener {
                 val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
-                popupIntent.putExtra("name", it.tag.toString())
+                popupIntent.putExtra("name", it.tag.toString()) // TODO mielimmun anna pysäkin code kun sitä käytetään data haussa
                 startActivity(popupIntent)
             }
         }
