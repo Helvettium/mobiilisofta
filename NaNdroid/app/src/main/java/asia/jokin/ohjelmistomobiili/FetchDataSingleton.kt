@@ -5,6 +5,7 @@ import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.model.LatLng
 import org.json.JSONArray
@@ -37,6 +38,7 @@ class FetchDataSingleton private constructor(context: Context) {
     private var context: Context
     private val queue = Volley.newRequestQueue(context)
     private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=zx123&pass=qmF:L}h3wR2n&&epsg_in=4326&epsg_out=4326"
+    private val SIRI_URL: String = "http://data.itsfactory.fi/siriaccess"
 
     init {
         // Init using context argument
@@ -146,6 +148,21 @@ class FetchDataSingleton private constructor(context: Context) {
                 }
             }
         })
+    }
+
+    fun getGeneralMessages(callback: AlertDataCallback) {
+        val requestUrl = "$SIRI_URL/gm/json"
+
+        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, requestUrl, null,
+                Response.Listener { response ->
+                    callback.onSuccess(parseData(response), context)
+                },
+                Response.ErrorListener { response ->
+                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                })
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest)
     }
 
     companion object : SingletonHolder<FetchDataSingleton, Context>(::FetchDataSingleton)
