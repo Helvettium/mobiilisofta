@@ -72,9 +72,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val clickableCircle1 = CircleOptions().center(testMarker1).clickable(true).visible(true).radius(20.0)
         val clickableCircle2 = CircleOptions().center(testMarker2).clickable(true).visible(true).radius(20.0)
         val clickableCircle3 = CircleOptions().center(testMarker3).clickable(true).visible(true).radius(20.0)
-        mMap.addCircle(clickableCircle1).run{tag = "circle 1"}
-        mMap.addCircle(clickableCircle2).run{tag = "circle 2"}
-        mMap.addCircle(clickableCircle3).run{tag = "circle 3"}
+        mMap.addCircle(clickableCircle1).run{tag = "0013"}
+        mMap.addCircle(clickableCircle2).run{tag = "0013"}
+        mMap.addCircle(clickableCircle3).run{tag = "0013"}
 
         FetchDataSingleton.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
@@ -95,8 +95,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         with(mMap) {
             setOnCircleClickListener {
                 val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
-                popupIntent.putExtra("name", it.tag.toString()) // TODO mielimmun anna pysäkin code kun sitä käytetään data haussa
-                startActivity(popupIntent)
+                popupIntent.putExtra("stopcode", it.tag.toString()) // TODO mielimmun anna pysäkin code kun sitä käytetään data haussa
+                this@MapsActivity.startActivity(popupIntent)
             }
         }
     }

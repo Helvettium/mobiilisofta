@@ -42,6 +42,8 @@ class StopsFragment : Fragment() {
                     // in content do not change the layout size of the RecyclerView
                     setHasFixedSize(true)
 
+                    //Toast.makeText(activity,response.toString(),Toast.LENGTH_LONG).show() // TODO REMOVE
+
                     // use a linear layout manager
                     layoutManager = viewManager
 
