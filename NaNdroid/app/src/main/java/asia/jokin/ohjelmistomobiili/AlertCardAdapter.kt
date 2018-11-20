@@ -5,8 +5,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import java.text.SimpleDateFormat
+import java.util.*
 
-class AlertCardAdapter (private val inputData: Array<String>):
+class AlertCardAdapter (private val inputData: ArrayList<Alert>):
         RecyclerView.Adapter<AlertCardAdapter.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
@@ -31,7 +33,16 @@ class AlertCardAdapter (private val inputData: Array<String>):
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.cardView.findViewById<TextView>(R.id.stopName).text = inputData[position]
+        val timePeriod = "${parseTime(inputData[position].recordedAt)} - ${parseTime(inputData[position].validUntil)}"
+        holder.cardView.findViewById<TextView>(R.id.stopName).text = timePeriod
+        holder.cardView.findViewById<TextView>(R.id.cardText).text = inputData[position].content
+    }
+
+    fun parseTime(time: Long): String {
+        val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale("fi"))
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = time
+        return formatter.format(calendar.time)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
