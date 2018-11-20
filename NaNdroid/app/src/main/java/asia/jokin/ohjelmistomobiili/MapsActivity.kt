@@ -34,7 +34,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         // TODO REMOVE v
-        val stopid: Int = intent.extras.getInt("stopid",0)
+        val stopid: Int = intent.getIntExtra("stopid",0)
         if (0!=stopid){
             val popupIntent = Intent(this, PopupActivity::class.java)
             popupIntent.putExtra("stopcode", stopid.toString())
