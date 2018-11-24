@@ -37,7 +37,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val stopid: Int = intent.getIntExtra("stopid",0)
         if (0!=stopid){
             val popupIntent = Intent(this, PopupActivity::class.java)
-            popupIntent.putExtra("stopcode", stopid.toString())
+            popupIntent.putExtra("stopid", stopid.toString())
             startActivity(popupIntent)
         }
         // TODO REMOVE ^
@@ -72,9 +72,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val clickableCircle1 = CircleOptions().center(testMarker1).clickable(true).visible(true).radius(20.0)
         val clickableCircle2 = CircleOptions().center(testMarker2).clickable(true).visible(true).radius(20.0)
         val clickableCircle3 = CircleOptions().center(testMarker3).clickable(true).visible(true).radius(20.0)
-        mMap.addCircle(clickableCircle1).run{tag = "0013"}
-        mMap.addCircle(clickableCircle2).run{tag = "0013"}
-        mMap.addCircle(clickableCircle3).run{tag = "0013"}
+        mMap.addCircle(clickableCircle1).run{tag = "0035"}
+        mMap.addCircle(clickableCircle2).run{tag = "0035"}
+        mMap.addCircle(clickableCircle3).run{tag = "0035"}
 
         FetchDataSingleton.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
@@ -95,8 +95,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         with(mMap) {
             setOnCircleClickListener {
                 val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
-                popupIntent.putExtra("stopcode", it.tag.toString()) // TODO mielimmun anna pysäkin code kun sitä käytetään data haussa
-                this@MapsActivity.startActivity(popupIntent)
+                popupIntent.putExtra("stopid", it.tag.toString().toInt()) // TODO mielimmun anna pysäkin code kun sitä käytetään data haussa
+                //Toast.makeText(this@MapsActivity, it.tag.toString(),Toast.LENGTH_LONG).show()
+                startActivity(popupIntent)
             }
         }
     }

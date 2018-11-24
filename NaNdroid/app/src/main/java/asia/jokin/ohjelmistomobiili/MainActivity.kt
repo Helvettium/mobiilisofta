@@ -5,39 +5,59 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.widget.Toast
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var timerTask: TimerTask
+    internal var timeOut = 30
+    private var timer = Timer()
+    internal val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
-        ActivityCompat.requestPermissions(this, permissions,0)
-        
-        if (!LocationSingleton.checkPermissionForLocation(this)) {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 10)
-        } // TODO aktiviteetti ei jää odottamaan vastausta
 
-
-        // TODO taustavari latausruutuun
         checkPermission()
-        // TODO tassa ladataan tiedot APIlta ja asetuksista
-
-        // TODO tuhoa tama aktiviteetti kun sirrytaan toiseen intentiin, ettei tahan voi palata
-        val startupIntent = Intent(this, FrontPage::class.java)
-        startActivity(startupIntent) // TODO uncomment
+        setTimerTask()
+        timer.schedule(timerTask, 100, 1000)
     }
 
     private fun checkPermission(){
-        val permission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO)
+        val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        ActivityCompat.requestPermissions(this, permissions,0)
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // mita jos ei anna lupaa
+    }
+
+    private fun getContext(): MainActivity {
+        return this
+    }
+
+    private fun endTimer(){
+        timer.cancel()
+        timer.purge()
+    }
+
+    private fun setTimerTask() {
+        timerTask = object : TimerTask() {
+            override fun run() {
+                handler.post {
+                    // Every second check permissions
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        checkPermission()
+                    }
+                    else {
+                        val startupIntent = Intent(getContext(), FrontPage::class.java)
+                        startActivity(startupIntent)
+                        getContext().finish()
+                        endTimer()
+                    }
+                }
+            }
         }
-
     }
 }

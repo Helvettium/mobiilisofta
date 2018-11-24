@@ -30,7 +30,6 @@ class FrontPage : AppCompatActivity() {
             viewPager.adapter = adapter
         }
 
-        // TODO REMOVE
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -58,5 +57,10 @@ class FrontPage : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.toolbar, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onBackPressed() {
+        this.finishAffinity()
+        super.onBackPressed()
     }
 }

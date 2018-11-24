@@ -29,10 +29,10 @@ class PopupActivity : AppCompatActivity() {
         val txtName: TextView = findViewById(R.id.txtName) //stop name text view
         rcv_busses.adapter = PopupAdapter(exampleData1, exampleData2,this)
 
-        val stopcode = intent.extras.getString("stopcode","")
+        val stopcode = intent.getIntExtra("stopid",0)
         // val stopcode = "0035" // Keskustori C
 
-        FetchDataSingleton.getInstance(this.applicationContext).getStopData(stopcode.toInt(), object: DataCallback{
+        FetchDataSingleton.getInstance(this.applicationContext).getStopData(stopcode, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 // Do stuff
                 var lines: ArrayList<String> = ArrayList()
