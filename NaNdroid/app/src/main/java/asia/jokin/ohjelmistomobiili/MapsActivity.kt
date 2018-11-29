@@ -122,29 +122,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
     }
 
     private fun updateStops(mLatLng: LatLng) {
+        // Tyhjennetään vanhat merkit
+        mMap.clear()
+
         // Haetaan pysäkit
         FetchDataSingleton.getInstance(this.applicationContext).getStopsData(mLatLng, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
-                for(i in 0 until response.length()) {
-                    val stop = response.getJSONObject(i)
-                //    var options = MarkerOptions()
-                //        options.position(LatLng(stop.lat, stop.lng))
-                //        options.title()
-            
-                    Toast.makeText(context, stop.toString(), Toast.LENGTH_LONG).show()
-                }
 
-                // Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
-                // do stuff with response
+                // Iteroidaan palautettu lista
+                for(i in 0 until response.length()) {
+
+                    // Koordinaatit tulee stringinä
+                    val coords = response.getJSONObject(i).getString("coords").split(",")
+                    val options = MarkerOptions()
+                        options.position(LatLng(coords[1].toDouble(), coords[0].toDouble()))
+                        options.title(response.getJSONObject(i).getString("name"))
+
+                    val marker = mMap.addMarker(options)
+                    marker.tag = response.getJSONObject(i)
+                }
             }
         })
-
     }
 
 
     override fun onMarkerClick(mMarker: Marker?): Boolean {
 
-        Log.d("Marker", mMarker.toString())
+        //Toast.makeText(context, mMarker.tag.toString(), Toast.LENGTH_LONG).show()
+        Log.d("Marker", mMarker?.tag.toString())
 
         return true
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
