@@ -43,12 +43,12 @@ object LocationSingleton {
         return mLastLocation
     }
 
-    fun getLat():Double? {
-        return mLastLocation?.latitude
+    fun getLat():Double {
+        return if (mLastLocation == null) 61.4980000 else mLastLocation!!.latitude
     }
 
-    fun getLng():Double? {
-        return mLastLocation?.longitude
+    fun getLng():Double {
+        return if (mLastLocation == null) 23.7604000 else mLastLocation!!.longitude
     }
 }
 
