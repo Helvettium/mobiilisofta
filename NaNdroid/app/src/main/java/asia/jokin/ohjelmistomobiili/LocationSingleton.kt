@@ -1,32 +1,25 @@
 package asia.jokin.ohjelmistomobiili
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
-import android.os.Build
-import android.os.Looper
-import android.support.v4.app.ActivityCompat
-import android.util.Log
-import com.google.android.gms.common.api.GoogleApiClient
+import android.support.v4.content.ContextCompat
 import com.google.android.gms.location.*
 
-
 object LocationSingleton {
+    // Virhe, mutta context tulee olemaan application itse joten sen tallentaminen pitäisi olla ok
+    @SuppressLint("StaticFieldLeak")
     lateinit var mFusedLocationClient: FusedLocationProviderClient
-    private var mLastLocation: Location? = null
+
     lateinit var mLocationRequest: LocationRequest
     lateinit var mLocationCallback: LocationCallback
 
+    private var mLastLocation: Location? = null
     private const val INTERVAL: Long = 5000
     private const val FASTEST_INTERVAL: Long = 2000
 
-    //@SuppressLint("MissingPermission")
-
     fun startUpdates(mContext: Context) {
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext)
 
         mLocationRequest = LocationRequest()
@@ -40,23 +33,26 @@ object LocationSingleton {
             }
         }
 
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+        // Varmistetaan että on oikeudet
+        if (ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+        }
     }
 
     fun getLocation():Location? {
         return mLastLocation
     }
 
-    fun getLat():Double {
-        return mLastLocation.latitude
+    fun getLat():Double? {
+        return mLastLocation?.latitude
     }
 
-    fun getLng():Double {
-        return mLastLocation.longitude
+    fun getLng():Double? {
+        return mLastLocation?.longitude
     }
 }
 
-/* OLD:
+/* OLD BACKUP:
     //var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private const val INTERVAL: Long = 2000
     private const val FASTEST_INTERVAL: Long = 1000
