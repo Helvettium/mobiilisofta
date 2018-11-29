@@ -21,7 +21,7 @@ import android.content.Context
 import org.json.JSONArray
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
 
     private lateinit var mMap: GoogleMap
 
@@ -54,8 +54,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
+        // Mihin kartan pitäisi osoittaa
+        val curLatLng = LatLng(LocationSingleton.getLat(), LocationSingleton.getLng())
 
+        // Kartta itse
+        mMap = googleMap
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(LocationSingleton.getLat(), LocationSingleton.getLng()), 16.0F))
+        mMap.setOnCameraIdleListener(this)
+
+        // Päivitetään pysäkit
+        updateStops(curLatLng)
+        
         
         // Default location values (keskustori)
 
@@ -66,7 +75,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-        val testLocation = LatLng(LocationSingleton.getLat(), LocationSingleton.getLng())
+
+/*
+        //val testLocation = LatLng(LocationSingleton.getLat(), LocationSingleton.getLng())
         val testMarker1 = LatLng(61.4980214, 23.7603118)
         val testMarker2 = LatLng(61.5040000, 23.7593000)
         val testMarker3 = LatLng(61.4960214, 23.7599118)
@@ -77,23 +88,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addCircle(clickableCircle1).run{tag = "0035"}
         mMap.addCircle(clickableCircle2).run{tag = "0035"}
         mMap.addCircle(clickableCircle3).run{tag = "0035"}
+*/
 
-        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
-            override fun onSuccess(response: JSONArray, context: Context) {
-                // Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
-                // do stuff with response
-            }
-        })
 
         /*
         TODO tassa vain esimerkkikoodia, bussit tulevat valmiissa softassa toisaalle
         johonkin funktioon, joka latautuu aina nakyman muuttuessa
         */
         
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testLocation, 16.0F))
+        
 
         // mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(defLat, defLng)))
 
+/*
         with(mMap) {
             setOnCircleClickListener {
                 val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
@@ -102,9 +109,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 startActivity(popupIntent)
             }
         }
+*/
     }
 
 
+    override fun onCameraIdle() {
+        // Minne kartta osoittaa
+        val curLatLng = mMap.getCameraPosition().target
+
+        // Tutkintaa onko kartta siirtynyt tarpeeksi?
+
+        // Päivitetään pysäkit
+        updateStops(curLatLng)
+    }
+
+
+
+    private fun updateStops(mLatLng: LatLng) {
+
+        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(mLatLng, object: DataCallback{
+            override fun onSuccess(response: JSONArray, context: Context) {
+                for(i in 0 until response.length()) {
+                    val stop = response.getJSONObject(i)
+            
+                    Toast.makeText(context, stop.toString(), Toast.LENGTH_LONG).show()
+                }
+
+                // Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                // do stuff with response
+            }
+        })
+
+    }
 
 
 
