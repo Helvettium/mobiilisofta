@@ -11,18 +11,15 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.Circle
-import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import org.json.JSONObject
 import android.R.attr.password
 import android.content.Context
+import android.util.Log
+import com.google.android.gms.maps.model.*
 import org.json.JSONArray
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
-
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +58,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         mMap = googleMap
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(LocationSingleton.getLat(), LocationSingleton.getLng()), 16.0F))
         mMap.setOnCameraIdleListener(this)
+        mMap.setOnMarkerClickListener(this)
 
         // Päivitetään pysäkit
         updateStops(curLatLng)
@@ -123,14 +121,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         updateStops(curLatLng)
     }
 
-
-
     private fun updateStops(mLatLng: LatLng) {
-
+        // Haetaan pysäkit
         FetchDataSingleton.getInstance(this.applicationContext).getStopsData(mLatLng, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 for(i in 0 until response.length()) {
                     val stop = response.getJSONObject(i)
+                //    var options = MarkerOptions()
+                //        options.position(LatLng(stop.lat, stop.lng))
+                //        options.title()
             
                     Toast.makeText(context, stop.toString(), Toast.LENGTH_LONG).show()
                 }
@@ -143,42 +142,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
     }
 
 
+    override fun onMarkerClick(mMarker: Marker?): Boolean {
 
-/*
-    @Override
-    public void onCameraMoveStarted(int reason) {
+        Log.d("Marker", mMarker.toString())
 
-        if (reason == OnCameraMoveStartedListener.REASON_GESTURE) {
-            Toast.makeText(this, "The user gestured on the map.",
-                           Toast.LENGTH_SHORT).show();
-        } else if (reason == OnCameraMoveStartedListener
-                                .REASON_API_ANIMATION) {
-            Toast.makeText(this, "The user tapped something on the map.",
-                           Toast.LENGTH_SHORT).show();
-        } else if (reason == OnCameraMoveStartedListener
-                                .REASON_DEVELOPER_ANIMATION) {
-            Toast.makeText(this, "The app moved the camera.",
-                           Toast.LENGTH_SHORT).show();
-        }
+        return true
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
-    @Override
-    public void onCameraMove() {
-        Toast.makeText(this, "The camera is moving.",
-                       Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onCameraMoveCanceled() {
-        Toast.makeText(this, "Camera movement canceled.",
-                       Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onCameraIdle() {
-        Toast.makeText(this, "The camera has stopped moving.",
-                       Toast.LENGTH_SHORT).show();
-    }
-}
-*/
 }
