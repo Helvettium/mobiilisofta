@@ -17,7 +17,7 @@
         android:padding="16dp" >
 
         <TextView
-            android:id="@+id/cardStopName"
+            android:id="@+id/stopName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -32,7 +32,7 @@
             android:id="@+id/cardText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cardStopName"
+            android:layout_below="@+id/stopName"
             android:layout_alignParentStart="true"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"

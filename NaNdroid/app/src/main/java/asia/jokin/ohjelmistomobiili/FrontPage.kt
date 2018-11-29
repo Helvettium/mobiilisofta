@@ -12,6 +12,7 @@ import android.widget.Toast
 
 class FrontPage : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_front_page)
@@ -56,5 +57,10 @@ class FrontPage : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.toolbar, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onBackPressed() {
+        this.finishAffinity()
+        super.onBackPressed()
     }
 }
