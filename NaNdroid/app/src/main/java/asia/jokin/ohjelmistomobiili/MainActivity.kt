@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
         checkPermission()
         setTimerTask()
         timer.schedule(timerTask, 100, 1000)
+
+        LocationSingleton.startUpdates(this)
     }
 
     private fun checkPermission(){

@@ -1,16 +1,62 @@
 package asia.jokin.ohjelmistomobiili
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Looper
 import android.support.v4.app.ActivityCompat
+import android.util.Log
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
 
-object LocationSingleton {
 
+object LocationSingleton {
+    lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private var mLastLocation: Location? = null
+    lateinit var mLocationRequest: LocationRequest
+    lateinit var mLocationCallback: LocationCallback
+
+    private const val INTERVAL: Long = 5000
+    private const val FASTEST_INTERVAL: Long = 2000
+
+    //@SuppressLint("MissingPermission")
+
+    fun startUpdates(mContext: Context) {
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext)
+
+        mLocationRequest = LocationRequest()
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.interval = INTERVAL
+        mLocationRequest.fastestInterval = FASTEST_INTERVAL
+
+        mLocationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                mLastLocation = locationResult.lastLocation
+            }
+        }
+
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+    }
+
+    fun getLocation():Location? {
+        return mLastLocation
+    }
+
+    fun getLat():Double {
+        return mLastLocation.latitude
+    }
+
+    fun getLng():Double {
+        return mLastLocation.longitude
+    }
+}
+
+/* OLD:
     //var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private const val INTERVAL: Long = 2000
     private const val FASTEST_INTERVAL: Long = 1000
@@ -56,4 +102,4 @@ object LocationSingleton {
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
 
     }
-}
+*/
