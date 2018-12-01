@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.*
 import org.json.JSONArray
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
+    private var mStops: MutableList<String> = mutableListOf()
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,8 +73,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
     }
 
     private fun updateStops(mLatLng: LatLng) {
-        // Tyhjennetään vanhat merkit
-        mMap.clear()
+        // Tyhjennetään vanhat merkit  -  Tutkitaan onko parempi jättää lojumaan?
+        // mMap.clear()
 
         // Haetaan pysäkit
         FetchDataSingleton.getInstance(this.applicationContext).getStopsData(mLatLng, object: DataCallback{
@@ -81,15 +82,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
 
                 // Iteroidaan palautettu lista
                 for(i in 0 until response.length()) {
+                    val mCode = response.getJSONObject(i).getString("code")
 
-                    // Koordinaatit tulee stringinä
-                    val coords = response.getJSONObject(i).getString("coords").split(",")
-                    val options = MarkerOptions()
+                    // Onko pysäkki jo kartassa?
+                    if (!mStops.contains(mCode)) {
+
+                        // Pysäkki listaan
+                        mStops.add(mCode)
+
+                        // Koordinaatit tulee stringinä
+                        val coords = response.getJSONObject(i).getString("coords").split(",")
+                        val options = MarkerOptions()
                         options.position(LatLng(coords[1].toDouble(), coords[0].toDouble()))
                         options.title(response.getJSONObject(i).getString("name"))
 
-                    val marker = mMap.addMarker(options)
-                    marker.tag = response.getJSONObject(i)
+                        val marker = mMap.addMarker(options)
+                        marker.tag = response.getJSONObject(i)
+                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_stop_marker))
+                    }
                 }
             }
         })
