@@ -35,14 +35,12 @@ class StopsFragment : Fragment() {
 
                     fetchedData.add(response[i].toString())
                 }
-                viewAdapter = StopsAdapter(fetchedData,activity!!.applicationContext)
+                viewAdapter = StopsAdapter(fetchedData,activity!!.applicationContext,view)
 
                 recyclerView = view.findViewById<RecyclerView>(R.id.stopsRecycle).apply {
                     // use this setting to improve performance if you know that changes
                     // in content do not change the layout size of the RecyclerView
                     setHasFixedSize(true)
-
-                    //Toast.makeText(activity,response.toString(),Toast.LENGTH_LONG).show() // TODO REMOVE
 
                     // use a linear layout manager
                     layoutManager = viewManager

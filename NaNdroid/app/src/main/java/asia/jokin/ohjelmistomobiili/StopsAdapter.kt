@@ -3,19 +3,24 @@ package asia.jokin.ohjelmistomobiili
 import android.content.Context
 import android.content.Intent
 import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.CardView
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import org.json.JSONArray
 import org.json.JSONObject
 
-class StopsAdapter (private val inputData: ArrayList<String>, classContext: Context):
+class StopsAdapter (private val inputData: ArrayList<String>, classContext: Context, view: View):
         RecyclerView.Adapter<StopsAdapter.MyViewHolder>() {
     private val appContext: Context = classContext
+    private val masterView: View = view
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewManager: RecyclerView.LayoutManager
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StopsAdapter.MyViewHolder {
         // create a new view
@@ -29,31 +34,28 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
     override fun onBindViewHolder(holder: StopsAdapter.MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        viewManager = LinearLayoutManager(appContext)
+
         val responseData = JSONObject(inputData[position])
         val departureDataString: String = responseData.getString("departures")
-
         if (departureDataString!=""&&inputData.size == 5) {
+            // TODO adapter
             val departureData: JSONArray = responseData.getJSONArray("departures")
-            val dataBus1: JSONObject = departureData.getJSONObject(0)
-            val dataBus2: JSONObject = departureData.getJSONObject(1)
-            val dataBus3: JSONObject = departureData.getJSONObject(2)
-            val dataBus4: JSONObject = departureData.getJSONObject(3)
-            val dataBus5: JSONObject = departureData.getJSONObject(4)
-            holder.cardView.findViewById<TextView>(R.id.stopBusDest1).text = dataBus1.getString("name1")
-            holder.cardView.findViewById<TextView>(R.id.stopBusDest2).text = dataBus2.getString("name1")
-            holder.cardView.findViewById<TextView>(R.id.stopBusDest3).text = dataBus3.getString("name1")
-            holder.cardView.findViewById<TextView>(R.id.stopBusDest4).text = dataBus4.getString("name1")
-            holder.cardView.findViewById<TextView>(R.id.stopBusDest5).text = dataBus5.getString("name1")
-            holder.cardView.findViewById<TextView>(R.id.stopBusNr1).text = dataBus1.getString("code")
-            holder.cardView.findViewById<TextView>(R.id.stopBusNr2).text = dataBus2.getString("code")
-            holder.cardView.findViewById<TextView>(R.id.stopBusNr3).text = dataBus3.getString("code")
-            holder.cardView.findViewById<TextView>(R.id.stopBusNr4).text = dataBus4.getString("code")
-            holder.cardView.findViewById<TextView>(R.id.stopBusNr5).text = dataBus5.getString("code")
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival1).text = parseTime(dataBus1.getString("time"))
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival2).text = parseTime(dataBus2.getString("time"))
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival3).text = parseTime(dataBus3.getString("time"))
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival4).text = parseTime(dataBus4.getString("time"))
-            holder.cardView.findViewById<TextView>(R.id.stopBusArrival5).text = parseTime(dataBus5.getString("time"))
+
+            val data: ArrayList<String> = ArrayList()
+            var maxStops = departureData.length()
+            if (maxStops>5) maxStops = 5 // TODO tasta asetuksiin joku juttu ehk
+
+            for (i in (0 until maxStops)) {
+                data.add(departureData[i].toString())
+            }
+
+            viewAdapter = BusStopAdapter(data,appContext)
+            recyclerView = holder.cardView.findViewById<RecyclerView>(R.id.stopRecycle).apply {
+                setHasFixedSize(true)
+                layoutManager = viewManager
+                adapter = viewAdapter
+            }
         }
         holder.cardView.findViewById<TextView>(R.id.stopName).text = responseData.getString("name_fi")
 
@@ -62,7 +64,7 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
             val clickIntent = Intent(appContext, MapsActivity::class.java)
             clickIntent.putExtra("stopid", responseData.getString("code").toInt())
             appContext.startActivity(clickIntent)
-        }
+        } // TODO sisainen adapteri ei sisally, eli klikkaus ei onnistu kokonaan
     }
 
     // Provide a reference to the views for each data item
