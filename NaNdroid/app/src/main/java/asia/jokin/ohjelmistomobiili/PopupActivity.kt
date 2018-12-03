@@ -37,9 +37,13 @@ class PopupActivity : AppCompatActivity() {
                 // Do stuff
                 var lines: ArrayList<String> = ArrayList()
                 var arrivals: ArrayList<String> = ArrayList()
+                var departures: JSONArray
                 val data = response.getJSONObject(0)
                 txtName.text = data.get("name_fi").toString()
-                val departures = data.getJSONArray("departures")
+                if (data.get("departures") != "")
+                    departures = data.getJSONArray("departures")
+                else
+                    departures = JSONArray()
 
                 val timeFormat = SimpleDateFormat("kk:mm")
                 val currenttime = timeFormat.format(Date())

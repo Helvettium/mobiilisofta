@@ -107,7 +107,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
 
     private fun openStop(mCode: String) {
         val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
-        popupIntent.putExtra("stopid", mCode)
+        popupIntent.putExtra("stopid", mCode.toInt())
         startActivity(popupIntent)
     }
 }

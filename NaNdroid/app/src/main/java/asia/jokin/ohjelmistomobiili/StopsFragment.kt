@@ -28,7 +28,7 @@ class StopsFragment : Fragment() {
 
         viewManager = LinearLayoutManager(activity)
 
-        fetchManager.getInstance(activity!!.applicationContext).getFiveClosestStops(testLocation, object: DataCallback{
+        fetchManager.getInstance(activity!!.applicationContext).getClosestStops(testLocation, 5, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 val fetchedData: ArrayList<String> = ArrayList()
                 for (i in (0 until response.length())) {

@@ -9,6 +9,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.model.LatLng
 import org.json.JSONArray
+import java.util.*
 
 open class SingletonHolder<out T, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator
@@ -39,13 +40,24 @@ class FetchDataSingleton private constructor(context: Context) {
     private val queue = Volley.newRequestQueue(context)
     private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=zx123&pass=qmF:L}h3wR2n&&epsg_in=4326&epsg_out=4326"
     private val SIRI_URL: String = "http://data.itsfactory.fi/siriaccess"
+    private var lastCoord = LatLng(0.0,0.0) // variable for the last getStopsData call coordinates
+    private lateinit var stopsResponse: JSONArray // variable for the last getStopsData call response
+    private var lastStop = -1 // variable for the last getStopData call stopcode
+    private var stopTime = Calendar.getInstance() // variable for the last getClosestStops call time
+    private lateinit var stopResponse: JSONArray // variable for the last getStopData call response
+    private var lastLine = "" // variable for the last getLineData call Line
+    private lateinit var lineResponse: JSONArray // variable for the last getLineData call response
+    private var closestTime = Calendar.getInstance() // variable for the last getClosestStops call time
+    private lateinit var closestResponse: JSONArray // variable for the last getClosestStops call response
 
     init {
         // Init using context argument
         this.context = context
+        this.closestTime.add(Calendar.YEAR, -1)
+        this.stopTime.add(Calendar.YEAR, -1)
     }
 
-    fun getStopsData(latlng: LatLng? = LatLng(61.4980000, 23.7604000), callback: DataCallback){
+    fun getStopsData(latlng: LatLng = LatLng(61.4980000, 23.7604000), callback: DataCallback){
         /*
         USAGE:
         FetchDataSingleton.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
@@ -54,24 +66,31 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        var lat = latlng.toString()
-        lat = lat.substringAfterLast("(", ")")
-        lat = lat.dropLast(1)
-        var lng = lat.substringAfter(",")
-        lat = lat.substringBefore(",")
+        if (latlng != lastCoord){
+            var lat = latlng.toString()
+            lat = lat.substringAfterLast("(", ")")
+            lat = lat.dropLast(1)
+            var lng = lat.substringAfter(",")
+            lat = lat.substringBefore(",")
 
-        val requestUrl = "$BASE_URL&request=stops_area&diameter=1000&p=1101&center_coordinate=$lng,$lat"
+            val requestUrl = "$BASE_URL&request=stops_area&diameter=1000&p=1101&center_coordinate=$lng,$lat"
 
-        val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
-                Response.Listener { response ->
-                    callback.onSuccess(response, context)
-                },
-                Response.ErrorListener { response ->
-                    // Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
-                })
+            val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
+                    Response.Listener { response ->
+                        lastCoord = latlng
+                        stopsResponse = response
+                        callback.onSuccess(response, context)
+                    },
+                    Response.ErrorListener { response ->
+                        // Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                    })
 
-        // Add the request to the RequestQueue.
-        queue.add(jsonArrayRequest)
+            // Add the request to the RequestQueue.
+            queue.add(jsonArrayRequest)
+        }
+        else {
+            callback.onSuccess(stopsResponse, context)
+        }
     }
 
     fun getStopData(stopcode: Int, callback: DataCallback){
@@ -83,18 +102,28 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        val requestUrl = "$BASE_URL&request=stop&p=10101011001&code=$stopcode"
+        var now = Calendar.getInstance()
+        now.add(Calendar.MINUTE, -1)
+        if (stopcode == lastStop && now.after(stopTime) == true || stopcode != lastStop) {
+            val requestUrl = "$BASE_URL&request=stop&p=10101011001&code=$stopcode"
 
-        val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
-                Response.Listener { response ->
-                    callback.onSuccess(response, context)
-                },
-                Response.ErrorListener { response ->
-                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
-                })
+            val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
+                    Response.Listener { response ->
+                        lastStop = stopcode
+                        stopResponse = response
+                        stopTime = Calendar.getInstance()
+                        callback.onSuccess(response, context)
+                    },
+                    Response.ErrorListener { response ->
+                        Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                    })
 
-        // Add the request to the RequestQueue.
-        queue.add(jsonArrayRequest)
+            // Add the request to the RequestQueue.
+            queue.add(jsonArrayRequest)
+        }
+        else {
+            callback.onSuccess(stopResponse, context)
+        }
     }
 
     fun getLineData(line: String, callback: DataCallback){
@@ -106,21 +135,28 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        val requestUrl = "$BASE_URL&request=lines&p=100111011&query=$line"
+        if (line != lastLine) {
+            val requestUrl = "$BASE_URL&request=lines&p=100111011&query=$line"
 
-        val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
-                Response.Listener { response ->
-                    callback.onSuccess(response, context)
-                },
-                Response.ErrorListener { response ->
-                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
-                })
+            val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
+                    Response.Listener { response ->
+                        lastLine = line
+                        lineResponse = response
+                        callback.onSuccess(response, context)
+                    },
+                    Response.ErrorListener { response ->
+                        Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                    })
 
-        // Add the request to the RequestQueue.
-        queue.add(jsonArrayRequest)
+            // Add the request to the RequestQueue.
+            queue.add(jsonArrayRequest)
+        }
+        else {
+            callback.onSuccess(lineResponse, context)
+        }
     }
 
-    fun getFiveClosestStops(latlng: LatLng? = LatLng(61.4980000, 23.7604000), callback: DataCallback) {
+    fun getClosestStops(latlng: LatLng = LatLng(61.4980000, 23.7604000), numberOfStops: Int = 5, callback: DataCallback) {
         /*
         USAGE:
         FetchDataSingleton.getInstance(this.applicationContext).getFiveClosestStops(testLocation, object: DataCallback{
@@ -129,25 +165,34 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        var stopsData = JSONArray() //JSONArray for the return value
-        val numberOfStops = 5 //number of stops for the array
+        var now = Calendar.getInstance()
+        now.add(Calendar.MINUTE, -1)
+        if (now.after(closestTime) == true) {
+            var stopsData = JSONArray() //JSONArray for the return value
 
-        FetchDataSingleton.getInstance(context).getStopsData(latlng, object: DataCallback{ //make a getStopsData call
-            override fun onSuccess(stops: JSONArray, context: Context) {
-                for (i in 0..numberOfStops*2) { //loop through the first 5 stops in response
-                    val item = stops.getJSONObject(i) //get JSONObject in position i
-                    val stopcode = item.get("code").toString().toInt() //get code value from item
-                    FetchDataSingleton.getInstance(context).getStopData(stopcode, object : DataCallback { //make a getStopData call for given stopcode
-                        override fun onSuccess(stop: JSONArray, context: Context) {
-                            if (stop.getJSONObject(0).get("departures")!="")
-                                stopsData.put(stop.getJSONObject(0)) //put the received data to a JSONArray
-                            if (stopsData.length() == numberOfStops)
-                                callback.onSuccess(stopsData, context) //call callback when there are 5 objects in array
-                        }
-                    })
+            FetchDataSingleton.getInstance(context).getStopsData(latlng, object: DataCallback{ //make a getStopsData call
+                override fun onSuccess(stops: JSONArray, context: Context) {
+                    for (i in 0..numberOfStops*2) { //loop through the stops in response
+                        val item = stops.getJSONObject(i) //get JSONObject in position i
+                        val stopcode = item.get("code").toString().toInt() //get code value from item
+                        FetchDataSingleton.getInstance(context).getStopData(stopcode, object : DataCallback { //make a getStopData call for given stopcode
+                            override fun onSuccess(stop: JSONArray, context: Context) {
+                                if (stop.getJSONObject(0).get("departures")!="")
+                                    stopsData.put(stop.getJSONObject(0)) //put the received data to a JSONArray
+                                if (stopsData.length() == numberOfStops){
+                                    closestResponse = stopsData
+                                    closestTime = Calendar.getInstance()
+                                    callback.onSuccess(stopsData, context) //call callback when there are 5 objects in array
+                                }
+                            }
+                        })
+                    }
                 }
-            }
-        })
+            })
+        }
+        else {
+            callback.onSuccess(closestResponse, context) //call callback when there are 5 objects in array
+        }
     }
 
     fun getGeneralMessages(callback: AlertDataCallback) {
