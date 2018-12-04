@@ -77,7 +77,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         // mMap.clear()
 
         // Haetaan pysäkit
-        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(mLatLng, object: DataCallback{
+        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(mLatLng, 1000, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
 
                 // Iteroidaan palautettu lista
