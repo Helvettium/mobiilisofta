@@ -38,7 +38,7 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
 
         val responseData = JSONObject(inputData[position])
         val departureDataString: String = responseData.getString("departures")
-        if (departureDataString!=""&&inputData.size == 5) {
+        if (departureDataString!="") {
             // TODO adapter
             val departureData: JSONArray = responseData.getJSONArray("departures")
 

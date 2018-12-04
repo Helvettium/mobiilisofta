@@ -8,6 +8,7 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.SphericalUtil
 import org.json.JSONArray
 import java.util.*
 
@@ -57,7 +58,7 @@ class FetchDataSingleton private constructor(context: Context) {
         this.stopTime.add(Calendar.YEAR, -1)
     }
 
-    fun getStopsData(latlng: LatLng = LatLng(61.4980000, 23.7604000), callback: DataCallback){
+    fun getStopsData(latlng: LatLng = LatLng(61.4980000, 23.7604000), dia: Int = 1000, callback: DataCallback){
         /*
         USAGE:
         FetchDataSingleton.getInstance(this.applicationContext).getStopsData(testLocation, object: DataCallback{
@@ -66,14 +67,15 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        if (latlng != lastCoord){
+        if (SphericalUtil.computeDistanceBetween(latlng, lastCoord) > 100){
             var lat = latlng.toString()
             lat = lat.substringAfterLast("(", ")")
             lat = lat.dropLast(1)
             var lng = lat.substringAfter(",")
             lat = lat.substringBefore(",")
+            val diameter = dia.toString()
 
-            val requestUrl = "$BASE_URL&request=stops_area&diameter=1000&p=1101&center_coordinate=$lng,$lat"
+            val requestUrl = "$BASE_URL&request=stops_area&diameter=$diameter&p=1101&center_coordinate=$lng,$lat"
 
             val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
                     Response.Listener { response ->
@@ -159,20 +161,20 @@ class FetchDataSingleton private constructor(context: Context) {
     fun getClosestStops(latlng: LatLng = LatLng(61.4980000, 23.7604000), numberOfStops: Int = 5, callback: DataCallback) {
         /*
         USAGE:
-        FetchDataSingleton.getInstance(this.applicationContext).getFiveClosestStops(testLocation, object: DataCallback{
+        FetchDataSingleton.getInstance(this.applicationContext).getFiveClosestStops(testLocation, 5, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 // Do stuff
             }
         })
         */
         var now = Calendar.getInstance()
-        now.add(Calendar.MINUTE, -1)
+        // now.add(Calendar.MINUTE, -1)
         if (now.after(closestTime) == true) {
             var stopsData = JSONArray() //JSONArray for the return value
 
-            FetchDataSingleton.getInstance(context).getStopsData(latlng, object: DataCallback{ //make a getStopsData call
+            FetchDataSingleton.getInstance(context).getStopsData(latlng, 400, object: DataCallback{ //make a getStopsData call
                 override fun onSuccess(stops: JSONArray, context: Context) {
-                    for (i in 0..numberOfStops*2) { //loop through the stops in response
+                    for (i in 0..stops.length()-1) { //loop through the stops in response
                         val item = stops.getJSONObject(i) //get JSONObject in position i
                         val stopcode = item.get("code").toString().toInt() //get code value from item
                         FetchDataSingleton.getInstance(context).getStopData(stopcode, object : DataCallback { //make a getStopData call for given stopcode
