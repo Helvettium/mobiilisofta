@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,7 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
         RecyclerView.Adapter<StopsAdapter.MyViewHolder>() {
     private val appContext: Context = classContext
 
-    val preferences = PreferenceManager.getDefaultSharedPreferences(classContext)
+    private val preferences = PreferenceManager.getDefaultSharedPreferences(classContext)!!
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -40,15 +41,16 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
 
         val responseData = JSONObject(inputData[position])
         val departureDataString: String = responseData.getString("departures")
-        if (departureDataString!=""&&inputData.size == 5) {
-            // TODO adapter
+        if (departureDataString!="") {
+
             val departureData: JSONArray = responseData.getJSONArray("departures")
 
-            val preference = preferences.getString("times_shown","5").toInt()
+            val preference: Int = preferences.getString("times_shown","5").toInt()
+
 
             val data: ArrayList<String> = ArrayList()
             var maxStops = departureData.length()
-            if (maxStops>preference) maxStops = preference // TODO tasta asetuksiin joku juttu ehk
+            if (maxStops>preference) maxStops = preference
 
             for (i in (0 until maxStops)) {
                 data.add(departureData[i].toString())
@@ -77,9 +79,6 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
     // Each data item is just a string in this case that is shown in a TextView.
     class MyViewHolder(val cardView: CardView) : RecyclerView.ViewHolder(cardView)
 
-    private fun parseTime(timeString: String): String {
-        return timeString.substring(0,2)+":"+timeString.substring(2)
-    }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = inputData.size

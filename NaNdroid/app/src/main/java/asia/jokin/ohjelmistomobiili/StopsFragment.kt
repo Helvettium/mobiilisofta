@@ -41,18 +41,18 @@ class StopsFragment : Fragment() {
         drawStops(view)
 
         setTimerTask(view)
-        timer.schedule(timerTask, 100, 5000)
+        timer.schedule(timerTask, 100, 10000)
         return view
     }
-
-
 
     private fun drawStops(view: View){
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         viewManager = LinearLayoutManager(activity)
 
-        fetchManager.getInstance(activity!!.applicationContext).getClosestStops(currentLocation, preferences.getString("nearby","5").toInt(), object: DataCallback{
+        val preference: Int = preferences.getString("nearby","5").toInt()
+
+        fetchManager.getInstance(activity!!.applicationContext).getClosestStops(currentLocation, preference, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 val fetchedData: ArrayList<String> = ArrayList()
                 for (i in (0 until response.length())) {
@@ -75,6 +75,43 @@ class StopsFragment : Fragment() {
                 }
             }
         })
+        //Toast.makeText(activity,preference.toString(),Toast.LENGTH_LONG).show()//TODO REMOVE
+    }
+
+    private fun updateStops(view: View){
+
+
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+        viewManager = LinearLayoutManager(activity)
+
+        val preference: Int = preferences.getString("nearby","5").toInt()
+
+        fetchManager.getInstance(activity!!.applicationContext).getClosestStops(currentLocation, preference, object: DataCallback{
+            override fun onSuccess(response: JSONArray, context: Context) {
+                val fetchedData: ArrayList<String> = ArrayList()
+                for (i in (0 until response.length())) {
+
+                    fetchedData.add(response[i].toString())
+                }
+                viewAdapter = StopsAdapter(fetchedData,activity!!.applicationContext,view)
+
+
+                recyclerView = view.findViewById<RecyclerView>(R.id.stopsRecycle).apply {
+                    // use this setting to improve performance if you know that changes
+                    // in content do not change the layout size of the RecyclerView
+                    setHasFixedSize(true)
+
+                    // use a linear layout manager
+                    layoutManager = viewManager
+
+                    // specify an viewAdapter (see also next example)
+                    adapter = viewAdapter
+
+                }
+            }
+        })
+        //Toast.makeText(activity,preference.toString(),Toast.LENGTH_LONG).show()//TODO REMOVE
     }
 
     private fun setTimerTask(view: View) {
