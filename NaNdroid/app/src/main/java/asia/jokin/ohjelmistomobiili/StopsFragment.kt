@@ -75,43 +75,6 @@ class StopsFragment : Fragment() {
                 }
             }
         })
-        //Toast.makeText(activity,preference.toString(),Toast.LENGTH_LONG).show()//TODO REMOVE
-    }
-
-    private fun updateStops(view: View){
-
-
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-
-        viewManager = LinearLayoutManager(activity)
-
-        val preference: Int = preferences.getString("nearby","5").toInt()
-
-        fetchManager.getInstance(activity!!.applicationContext).getClosestStops(currentLocation, preference, object: DataCallback{
-            override fun onSuccess(response: JSONArray, context: Context) {
-                val fetchedData: ArrayList<String> = ArrayList()
-                for (i in (0 until response.length())) {
-
-                    fetchedData.add(response[i].toString())
-                }
-                viewAdapter = StopsAdapter(fetchedData,activity!!.applicationContext,view)
-
-
-                recyclerView = view.findViewById<RecyclerView>(R.id.stopsRecycle).apply {
-                    // use this setting to improve performance if you know that changes
-                    // in content do not change the layout size of the RecyclerView
-                    setHasFixedSize(true)
-
-                    // use a linear layout manager
-                    layoutManager = viewManager
-
-                    // specify an viewAdapter (see also next example)
-                    adapter = viewAdapter
-
-                }
-            }
-        })
-        //Toast.makeText(activity,preference.toString(),Toast.LENGTH_LONG).show()//TODO REMOVE
     }
 
     private fun setTimerTask(view: View) {
@@ -119,10 +82,9 @@ class StopsFragment : Fragment() {
             override fun run() {
                 handler.post {
                     testLocation = LatLng(LocationSingleton.getLat(),LocationSingleton.getLng())
-                    if (testLocation != currentLocation){
-                        currentLocation = testLocation
-                        drawStops(view)
-                    }
+                    currentLocation = testLocation
+                    drawStops(view)
+                    Toast.makeText(this@StopsFragment.activity,currentLocation.latitude.toString(),Toast.LENGTH_LONG).show()
                 }
             }
         }
