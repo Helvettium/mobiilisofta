@@ -2,6 +2,7 @@ package asia.jokin.ohjelmistomobiili
 
 import android.content.Context
 import android.content.Intent
+import android.preference.PreferenceManager
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
@@ -16,7 +17,8 @@ import org.json.JSONObject
 class StopsAdapter (private val inputData: ArrayList<String>, classContext: Context, view: View):
         RecyclerView.Adapter<StopsAdapter.MyViewHolder>() {
     private val appContext: Context = classContext
-    private val masterView: View = view
+
+    val preferences = PreferenceManager.getDefaultSharedPreferences(classContext)
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -42,9 +44,11 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
             // TODO adapter
             val departureData: JSONArray = responseData.getJSONArray("departures")
 
+            val preference = preferences.getString("times_shown","5").toInt()
+
             val data: ArrayList<String> = ArrayList()
             var maxStops = departureData.length()
-            if (maxStops>5) maxStops = 5 // TODO tasta asetuksiin joku juttu ehk
+            if (maxStops>preference) maxStops = preference // TODO tasta asetuksiin joku juttu ehk
 
             for (i in (0 until maxStops)) {
                 data.add(departureData[i].toString())

@@ -27,6 +27,30 @@
         <item>-1</item>
     </string-array>
 
+    <string name="pref_title_times_shown">Maximum amount of arrivals shown</string>
+    <string-array name="pref_times_shown_list_titles">
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
+    </string-array>
+    <string-array name="pref_times_shown_list_values">
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
+    </string-array>
+
+    <string name="pref_title_nearby">Amount of nearby stops shown</string>
+    <string-array name="pref_nearby_list_titles">
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
+    </string-array>
+    <string-array name="pref_nearby_list_values">
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
+    </string-array>
+
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 

@@ -13,7 +13,6 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var timerTask: TimerTask
-    internal var timeOut = 30
     private var timer = Timer()
     internal val handler = Handler()
 
@@ -21,11 +20,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        LocationSingleton.startUpdates(this)
+
         checkPermission()
         setTimerTask()
         timer.schedule(timerTask, 100, 1000)
 
-        LocationSingleton.startUpdates(this)
+
     }
 
     private fun checkPermission(){
