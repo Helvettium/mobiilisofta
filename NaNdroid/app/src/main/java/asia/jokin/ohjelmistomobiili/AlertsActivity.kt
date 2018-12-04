@@ -22,6 +22,11 @@ class AlertsActivity : AppCompatActivity() {
             override fun onSuccess(response: ArrayList<Alert>, context: Context) {
                 val fetchedData: ArrayList<Alert> = response
 
+                if(fetchedData.isEmpty()) {
+                    // Add fake alert
+                    fetchedData.add(Alert(123, 456, "test"))
+                }
+
                 viewAdapter = AlertCardAdapter(fetchedData)
 
                 recyclerView = findViewById<RecyclerView>(R.id.alertRecycle).apply {
