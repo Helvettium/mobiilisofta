@@ -1,18 +1,12 @@
 package asia.jokin.ohjelmistomobiili
 
-import android.Manifest
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,8 +17,6 @@ import java.util.*
 
 class StopsFragment : Fragment() {
 
-    private var testLocation: LatLng = LatLng(61.4975568, 23.7603378)
-    private var currentLocation: LatLng = LatLng(LocationSingleton.getLat(),LocationSingleton.getLng())
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -32,7 +24,6 @@ class StopsFragment : Fragment() {
     private lateinit var timerTask: TimerTask
     private var timer = Timer()
     internal val handler = Handler()
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -47,6 +38,9 @@ class StopsFragment : Fragment() {
 
     private fun drawStops(view: View){
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val currentLocation = LatLng(LocationSingleton.getLat(),LocationSingleton.getLng())
+        Toast.makeText(this@StopsFragment.activity,currentLocation.latitude.toString(),Toast.LENGTH_LONG).show()
 
         viewManager = LinearLayoutManager(activity)
 
@@ -81,10 +75,9 @@ class StopsFragment : Fragment() {
         timerTask = object : TimerTask() {
             override fun run() {
                 handler.post {
-                    testLocation = LatLng(LocationSingleton.getLat(),LocationSingleton.getLng())
-                    currentLocation = testLocation
+
                     drawStops(view)
-                    Toast.makeText(this@StopsFragment.activity,currentLocation.latitude.toString(),Toast.LENGTH_LONG).show()
+
                 }
             }
         }
