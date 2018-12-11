@@ -40,7 +40,7 @@ class StopsFragment : Fragment() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         val currentLocation = LatLng(LocationSingleton.getLat(),LocationSingleton.getLng())
-        Toast.makeText(this@StopsFragment.activity,currentLocation.latitude.toString(),Toast.LENGTH_LONG).show()
+        //Toast.makeText(this@StopsFragment.activity,currentLocation.latitude.toString()+", "+currentLocation.longitude.toString(),Toast.LENGTH_LONG).show()
 
         viewManager = LinearLayoutManager(activity)
 
@@ -75,9 +75,7 @@ class StopsFragment : Fragment() {
         timerTask = object : TimerTask() {
             override fun run() {
                 handler.post {
-
                     drawStops(view)
-
                 }
             }
         }

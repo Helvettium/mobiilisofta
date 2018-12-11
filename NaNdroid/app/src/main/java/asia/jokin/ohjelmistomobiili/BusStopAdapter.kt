@@ -6,14 +6,16 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import org.json.JSONArray
 import org.json.JSONObject
 
-class BusStopAdapter (private val inputData: ArrayList<String>, classContext: Context):
+class BusStopAdapter (private val inputData: ArrayList<String>, classContext: Context, this_bus: String):
         RecyclerView.Adapter<BusStopAdapter.MyViewHolder>() {
     private val appContext: Context = classContext
+    private val thisBus: String = this_bus
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BusStopAdapter.MyViewHolder {
@@ -33,6 +35,19 @@ class BusStopAdapter (private val inputData: ArrayList<String>, classContext: Co
         holder.itemView.findViewById<TextView>(R.id.stopBusDest).text = responseData.getString("name1")
         holder.itemView.findViewById<TextView>(R.id.stopBusNr).text = responseData.getString("code")
         holder.itemView.findViewById<TextView>(R.id.stopBusArrival).text = parseTime(responseData.getString("time"))
+
+        /*val cardContent:ConstraintLayout = holder.cardView.findViewById(R.id.stopContent)
+        cardContent.setOnClickListener {
+            val clickIntent = Intent(appContext, MapsActivity::class.java)
+            clickIntent.putExtra("stopid", responseData.getString("code").toInt())
+            appContext.startActivity(clickIntent)
+        } // TODO sisainen adapteri ei sisally, eli klikkaus ei onnistu kokonaan*/
+        val busStopsContent: ConstraintLayout = holder.itemView.findViewById(R.id.stopLayout)
+        busStopsContent.setOnClickListener{
+            val clickIntent = Intent(appContext, MapsActivity::class.java)
+            clickIntent.putExtra("stopid", thisBus.toInt())
+            appContext.startActivity(clickIntent)
+        }
     }
 
     // Provide a reference to the views for each data item

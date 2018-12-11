@@ -56,7 +56,7 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
                 data.add(departureData[i].toString())
             }
 
-            viewAdapter = BusStopAdapter(data,appContext)
+            viewAdapter = BusStopAdapter(data,appContext,responseData.getString("code"))
             recyclerView = holder.cardView.findViewById<RecyclerView>(R.id.stopRecycle).apply {
                 setHasFixedSize(true)
                 layoutManager = viewManager
