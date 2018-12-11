@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MIHI</string>
     <string name="title_activity_alerts">Alerts</string>
+    <string name="no_alerts_active">No alerts active</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->

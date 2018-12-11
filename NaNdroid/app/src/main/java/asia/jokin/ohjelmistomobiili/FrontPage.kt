@@ -1,5 +1,6 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -9,9 +10,11 @@ import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import android.support.design.widget.Snackbar
 
 class FrontPage : AppCompatActivity() {
-
+    private val fetchManager = FetchDataSingleton
+    private var alerts: ArrayList<Alert> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,8 @@ class FrontPage : AppCompatActivity() {
             viewPager.adapter = adapter
         }
 
+        // Get alerts and enable button if there are any
+        getAlerts()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -42,9 +47,17 @@ class FrontPage : AppCompatActivity() {
 
         R.id.action_alerts -> {
             // User chose the "Alerts" action, mark the current item
-            val startupIntent = Intent(this, AlertsActivity::class.java)
-            startActivity(startupIntent)
-            true
+            if(!alerts.isEmpty()) {
+                val startupIntent = Intent(this, AlertsActivity::class.java)
+                startupIntent.putExtra("alertsData", alerts)
+                startActivity(startupIntent)
+                true
+            }
+            else {
+                val noAlertsSnackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), R.string.no_alerts_active, Snackbar.LENGTH_SHORT)
+                noAlertsSnackbar.show()
+                false
+            }
         }
 
         else -> {
@@ -62,5 +75,13 @@ class FrontPage : AppCompatActivity() {
     override fun onBackPressed() {
         this.finishAffinity()
         super.onBackPressed()
+    }
+
+    private fun getAlerts() {
+        fetchManager.getInstance(this.applicationContext).getGeneralMessages(object: AlertDataCallback {
+            override fun onSuccess(response: ArrayList<Alert>, context: Context) {
+                alerts = response
+            }
+        })
     }
 }

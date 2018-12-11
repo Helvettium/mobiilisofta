@@ -1,3 +1,5 @@
 package asia.jokin.ohjelmistomobiili
 
-data class Alert(val recordedAt: Long, val validUntil: Long, val content: String)
+import java.io.Serializable
+
+data class Alert(val recordedAt: Long, val validUntil: Long, val content: String): Serializable
