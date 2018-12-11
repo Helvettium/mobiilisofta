@@ -28,7 +28,8 @@
         <activity android:name=".FrontPage" />
         <activity
             android:name=".AlertsActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert" />
+            android:label="@string/title_activity_alerts"/>
+
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
