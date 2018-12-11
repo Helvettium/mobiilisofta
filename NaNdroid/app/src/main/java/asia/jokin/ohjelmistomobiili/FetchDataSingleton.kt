@@ -39,7 +39,7 @@ open class SingletonHolder<out T, in A>(creator: (A) -> T) {
 class FetchDataSingleton private constructor(context: Context) {
     private var context: Context
     private val queue = Volley.newRequestQueue(context)
-    private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=zx123&pass=qmF:L}h3wR2n&&epsg_in=4326&epsg_out=4326"
+    private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=4yu97&pass=h3zwf&&epsg_in=4326&epsg_out=4326"
     private val SIRI_URL: String = "http://data.itsfactory.fi/siriaccess"
     private var lastCoord = LatLng(0.0,0.0) // variable for the last getStopsData call coordinates
     private lateinit var stopsResponse: JSONArray // variable for the last getStopsData call response
