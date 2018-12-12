@@ -6,12 +6,47 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/LinesText"
+        android:id="@+id/linesTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="in LinesFragment"
+        android:text="LINES"
+        android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/lineSearch"
+        android:layout_width="134dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="172dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linesTitle" />
+
+    <TextView
+        android:id="@+id/searchLine"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:gravity="right|center_vertical"
+        android:text="Search:"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/lineSearch"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linesTitle" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lineList"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineSearch" />
 </android.support.constraint.ConstraintLayout>
