@@ -22,8 +22,8 @@ import java.time.LocalTime
 import java.util.*
 
 class PopupActivity : AppCompatActivity() {
-    val exampleData1: ArrayList<String> = arrayListOf("example")
-    val exampleData2: ArrayList<String> = arrayListOf("00:00")
+    private val exampleData1: ArrayList<String> = arrayListOf("example")
+    private val exampleData2: ArrayList<String> = arrayListOf("00:00")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,15 +44,15 @@ class PopupActivity : AppCompatActivity() {
         FetchDataSingleton.getInstance(this.applicationContext).getStopData(stopcode, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
                 // Do stuff
-                var lines: ArrayList<String> = ArrayList()
-                var arrivals: ArrayList<String> = ArrayList()
-                var departures: JSONArray
+                val lines: ArrayList<String> = ArrayList()
+                val arrivals: ArrayList<String> = ArrayList()
+                val departures: JSONArray
                 val data = response.getJSONObject(0)
                 txtName.text = data.get("name_fi").toString()
-                if (data.get("departures") != "")
-                    departures = data.getJSONArray("departures")
+                departures = if (data.get("departures") != "")
+                    data.getJSONArray("departures")
                 else
-                    departures = JSONArray()
+                    JSONArray()
 
                 val timeFormat = SimpleDateFormat("kk:mm")
                 val currenttime = timeFormat.format(Date())
@@ -64,12 +64,12 @@ class PopupActivity : AppCompatActivity() {
                             "")
                 }
 
-                for (i in 0..departures.length()-1) {
+                for (i in 0 until departures.length()) {
                     val departure = departures.getJSONObject(i)
                     lines.add("${departure.get("code")} ${departure.get("name1")}")
                     var arrival = departure.get("time").toString()
                     arrival = "${arrival.substring(0,2)}:${arrival.substring(2,4)}"
-                    arrivals.add("$arrival")
+                    arrivals.add(arrival)
                 }
                 addData(lines, arrivals)
             }

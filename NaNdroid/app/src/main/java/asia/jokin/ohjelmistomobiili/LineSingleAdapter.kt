@@ -1,5 +1,6 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -66,6 +67,7 @@ class LineSingleAdapter (private val inputData: ArrayList<String>, classContext:
         }
     }
 
+    @SuppressLint("ApplySharedPref")
     private fun changeFavStatus(favStar: ImageView, itemCode: String, itemName: String, itemLineStops: String){
         val stopString = preferences.getString("favs_array_lines","[]")
         if (stopString != ""){

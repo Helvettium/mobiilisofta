@@ -38,7 +38,7 @@ class AlertCardAdapter (private val inputData: ArrayList<Alert>):
         holder.cardView.findViewById<TextView>(R.id.alertText).text = inputData[position].content
     }
 
-    fun parseTime(time: Long): String {
+    private fun parseTime(time: Long): String {
         val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale("fi"))
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = time

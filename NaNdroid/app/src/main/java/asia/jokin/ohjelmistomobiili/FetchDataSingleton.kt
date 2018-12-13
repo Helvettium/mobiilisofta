@@ -37,7 +37,7 @@ open class SingletonHolder<out T, in A>(creator: (A) -> T) {
 }
 
 class FetchDataSingleton private constructor(context: Context) {
-    private var context: Context
+    private var context: Context = context
     private val queue = Volley.newRequestQueue(context)
     private val BASE_URL: String = "http://api.publictransport.tampere.fi/prod/?user=4yu97&pass=h3zwf&&epsg_in=4326&epsg_out=4326"
     private val SIRI_URL: String = "http://data.itsfactory.fi/siriaccess"
@@ -53,7 +53,6 @@ class FetchDataSingleton private constructor(context: Context) {
 
     init {
         // Init using context argument
-        this.context = context
         this.closestTime.add(Calendar.YEAR, -1)
         this.stopTime.add(Calendar.YEAR, -1)
     }
@@ -71,7 +70,7 @@ class FetchDataSingleton private constructor(context: Context) {
             var lat = latlng.toString()
             lat = lat.substringAfterLast("(", ")")
             lat = lat.dropLast(1)
-            var lng = lat.substringAfter(",")
+            val lng = lat.substringAfter(",")
             lat = lat.substringBefore(",")
             val diameter = dia.toString()
 
@@ -104,9 +103,9 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        var now = Calendar.getInstance()
+        val now = Calendar.getInstance()
         now.add(Calendar.MINUTE, -1)
-        if (stopcode == lastStop && now.after(stopTime) == true || stopcode != lastStop) {
+        if (stopcode == lastStop && now.after(stopTime) || stopcode != lastStop) {
             val requestUrl = "$BASE_URL&request=stop&p=10101011001&code=$stopcode"
 
             val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, requestUrl, null,
@@ -167,15 +166,15 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        var now = Calendar.getInstance()
+        val now = Calendar.getInstance()
         // now.add(Calendar.MINUTE, -1)
-        if (now.after(closestTime) == true) {
-            var stopsData = JSONArray() //JSONArray for the return value
+        if (now.after(closestTime)) {
+            val stopsData = JSONArray() //JSONArray for the return value
 
             @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
             FetchDataSingleton.getInstance(context).getStopsData(latlng, 400, object: DataCallback{ //make a getStopsData call
                 override fun onSuccess(stops: JSONArray, context: Context) {
-                    for (i in 0..stops.length()-1) { //loop through the stops in response
+                    for (i in 0 until stops.length()) { //loop through the stops in response
                         val item = stops.getJSONObject(i) //get JSONObject in position i
                         val stopcode = item.get("code").toString().toInt() //get code value from item
                         @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
