@@ -26,10 +26,13 @@ class FavouritesFragment : Fragment() {
     private lateinit var viewAdapter2: RecyclerView.Adapter<*>
     private lateinit var viewManager2: RecyclerView.LayoutManager
     private lateinit var timerTask: TimerTask
+    private lateinit var lateView: View
+
     private var timer = Timer()
     internal val handler = Handler()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         val view = inflater.inflate(R.layout.favourites_fragment, container, false)
+        lateView = view
         viewManager3 = LinearLayoutManager(activity)
         viewManager2 = LinearLayoutManager(activity)
         /*
@@ -43,6 +46,12 @@ class FavouritesFragment : Fragment() {
         setTimerTask(view)
         timer.schedule(timerTask, 100, 10000)
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        drawStops(lateView)
+        drawLines(lateView)
     }
 
     private fun drawStops(view: View){
