@@ -2,6 +2,7 @@ package asia.jokin.ohjelmistomobiili
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.CardView
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import org.json.JSONArray
 import org.json.JSONObject
@@ -65,12 +67,74 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
         }
         holder.cardView.findViewById<TextView>(R.id.stopName).text = responseData.getString("name_fi")
 
+        val favStar: ImageView = holder.cardView.findViewById(R.id.favStar)
+        setFavIcon(favStar,responseData.getString("code"))
+        favStar.setOnClickListener{
+            changeFavStatus(
+                    favStar,
+                    responseData.getString("code"),
+                    responseData.getString("name_fi"),
+                    "NOT YET IMPLEMENTED")
+        }
+
         val cardContent:ConstraintLayout = holder.cardView.findViewById(R.id.stopContent)
         cardContent.setOnClickListener {
             val clickIntent = Intent(appContext, MapsActivity::class.java)
             clickIntent.putExtra("stopid", responseData.getString("code").toInt())
             appContext.startActivity(clickIntent)
-        } // TODO sisainen adapteri ei sisally, eli klikkaus ei onnistu kokonaan
+        }
+    }
+
+    private fun changeFavStatus(favStar: ImageView, itemCode: String, itemName: String, itemLines: String){
+        val stopString = preferences.getString("favs_array_stops","[]")
+        if (stopString != ""){
+            val stopArray = JSONArray(stopString)
+            for(i in (0 until stopArray.length())) {
+                if (stopArray[i] is JSONObject) {
+                    val jsonObject: JSONObject = stopArray[i] as JSONObject
+                    if (jsonObject.getString("code") == itemCode) {
+                        favStar.setImageResource(R.drawable.ic_star_unselect)
+                        stopArray.remove(i)
+
+                        val editor: SharedPreferences.Editor = preferences.edit()
+                        editor.putString("favs_array_stops", stopArray.toString())
+                        editor.apply()
+
+                        return
+                    }
+                }
+                else {
+                    Log.e("changeFavStatus","Unknown setting type")
+                }
+            }
+            val newObject = JSONObject("{'name':'$itemName','code':'$itemCode','lines':'$itemLines'}")
+            favStar.setImageResource(R.drawable.ic_star_select)
+            stopArray.put(newObject)
+            Log.e("changeFavStatus","status added with "+newObject.toString())
+            val editor: SharedPreferences.Editor = preferences.edit()
+            editor.putString("favs_array_stops", stopArray.toString())
+            editor.apply()
+        }
+
+    }
+
+    private fun setFavIcon(favStar: ImageView, itemCode: String){
+        val stopString = preferences.getString("favs_array_stops","")
+        if (stopString != ""){
+            val stopArray = JSONArray(stopString)
+            for(i in (0 until stopArray.length())) {
+                if (stopArray[i] is JSONObject) {
+                    val jsonObject: JSONObject = stopArray[i] as JSONObject
+                    if (jsonObject.getString("code") == itemCode) {
+                        favStar.setImageResource(R.drawable.ic_star_select)
+                        return
+                    }
+                }
+                else {
+                    Log.e("setFavIcon","Unknown setting type")
+                }
+            }
+        }
     }
 
     // Provide a reference to the views for each data item

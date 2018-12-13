@@ -48,4 +48,20 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_title_nearby" />
+    <ListPreference
+        android:defaultValue="3"
+        android:entries="@array/pref_max_stops_titles"
+        android:entryValues="@array/pref_max_stops_values"
+        android:key="max_stops"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_max_stops" />
+    <ListPreference
+        android:defaultValue="3"
+        android:entries="@array/pref_max_lines_titles"
+        android:entryValues="@array/pref_max_lines_values"
+        android:key="max_lines"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_max_lines" />
 </PreferenceScreen>

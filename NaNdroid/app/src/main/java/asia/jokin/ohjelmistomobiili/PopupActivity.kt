@@ -1,10 +1,14 @@
 package asia.jokin.ohjelmistomobiili
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.widget.LinearLayoutManager
 import android.text.format.Time
+import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_popup.*
@@ -24,6 +28,8 @@ class PopupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_popup)
 
+        val favStar: ImageView = findViewById(R.id.favStar)
+
         // Creates a vertical Layout Manager
         rcv_busses.layoutManager = LinearLayoutManager(this)
         val txtName: TextView = findViewById(R.id.txtName) //stop name text view
@@ -31,6 +37,8 @@ class PopupActivity : AppCompatActivity() {
 
         val stopcode = intent.getIntExtra("stopid",0)
         // val stopcode = "0035" // Keskustori C
+
+        setFavIcon(favStar,stopcode.toString())
 
         FetchDataSingleton.getInstance(this.applicationContext).getStopData(stopcode, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
@@ -48,6 +56,12 @@ class PopupActivity : AppCompatActivity() {
                 val timeFormat = SimpleDateFormat("kk:mm")
                 val currenttime = timeFormat.format(Date())
 
+                favStar.setOnClickListener {
+                    changeFavStatus(favStar,
+                            stopcode.toString(),
+                            data.getString("name_fi"),
+                            "NOT YET IMPLEMENTED")
+                }
 
                 for (i in 0..departures.length()-1) {
                     val departure = departures.getJSONObject(i)
@@ -59,6 +73,60 @@ class PopupActivity : AppCompatActivity() {
                 addData(lines, arrivals)
             }
         })
+    }
+
+    private fun changeFavStatus(favStar: ImageView, itemCode: String, itemName: String, itemLines: String){
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)!!
+        val stopString = preferences.getString("favs_array_stops","[]")
+        if (stopString != ""){
+            val stopArray = JSONArray(stopString)
+            for(i in (0 until stopArray.length())) {
+                if (stopArray[i] is JSONObject) {
+                    val jsonObject: JSONObject = stopArray[i] as JSONObject
+                    if (jsonObject.getString("code") == itemCode) {
+                        favStar.setImageResource(R.drawable.ic_star_unselect)
+                        stopArray.remove(i)
+
+                        val editor: SharedPreferences.Editor = preferences.edit()
+                        editor.putString("favs_array_stops", stopArray.toString())
+                        editor.apply()
+
+                        return
+                    }
+                }
+                else {
+                    Log.e("changeFavStatus","Unknown setting type")
+                }
+            }
+            val newObject = JSONObject("{'name':'$itemName','code':'$itemCode','lines':'$itemLines'}")
+            favStar.setImageResource(R.drawable.ic_star_select)
+            stopArray.put(newObject)
+            Log.e("changeFavStatus","status added with "+newObject.toString())
+            val editor: SharedPreferences.Editor = preferences.edit()
+            editor.putString("favs_array_stops", stopArray.toString())
+            editor.apply()
+        }
+
+    }
+
+    private fun setFavIcon(favStar: ImageView, itemCode: String){
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)!!
+        val stopString = preferences.getString("favs_array_stops","")
+        if (stopString != ""){
+            val stopArray = JSONArray(stopString)
+            for(i in (0 until stopArray.length())) {
+                if (stopArray[i] is JSONObject) {
+                    val jsonObject: JSONObject = stopArray[i] as JSONObject
+                    if (jsonObject.getString("code") == itemCode) {
+                        favStar.setImageResource(R.drawable.ic_star_select)
+                        return
+                    }
+                }
+                else {
+                    Log.e("setFavIcon","Unknown setting type")
+                }
+            }
+        }
     }
 
     fun addData(lines: ArrayList<String>, arrivals: ArrayList<String>) {

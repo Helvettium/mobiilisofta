@@ -46,7 +46,7 @@ class LineContentAdapter (private val inputData: ArrayList<String>, classContext
         }
 
         lineListItem.setOnClickListener{
-            val clickIntent = Intent(appContext, PopupActivity::class.java)
+            val clickIntent = Intent(appContext, MapsActivity::class.java)
             clickIntent.putExtra("stopid", responseData.getString("code").toInt())
             appContext.startActivity(clickIntent)
         }

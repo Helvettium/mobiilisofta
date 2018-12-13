@@ -84,6 +84,8 @@ class SettingsActivity : AppCompatPreferenceActivity() {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("times_shown"))
             bindPreferenceSummaryToValue(findPreference("nearby"))
+            bindPreferenceSummaryToValue(findPreference("max_stops"))
+            bindPreferenceSummaryToValue(findPreference("max_lines"))
         }
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
