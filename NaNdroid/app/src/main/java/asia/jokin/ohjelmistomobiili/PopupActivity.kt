@@ -60,7 +60,7 @@ class PopupActivity : AppCompatActivity() {
                     changeFavStatus(favStar,
                             stopcode.toString(),
                             data.getString("name_fi"),
-                            "NOT YET IMPLEMENTED")
+                            "")
                 }
 
                 for (i in 0..departures.length()-1) {
