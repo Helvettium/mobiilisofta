@@ -39,7 +39,6 @@ class LineContentAdapter (private val inputData: ArrayList<String>, classContext
 
         timeFromStart.text = responseData.getInt("time").toString()
         lineStopName.text = responseData.getString("name")
-        Log.e("useful",responseData.toString())
         if (position%2==1){
             lineListItem.setBackgroundColor(holder.itemView.resources.getColor(R.color.lightGrey))
             //lineListItem.setBackgroundColor(R.color.lightGrey)

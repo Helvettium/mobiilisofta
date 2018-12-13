@@ -12,34 +12,35 @@ import android.widget.ImageView
 import android.widget.TextView
 import org.json.JSONObject
 
-class FavouritesStopsAdapter (private val inputData: ArrayList<String>, classContext: Context, view: View):
-        RecyclerView.Adapter<FavouritesStopsAdapter.MyViewHolder>() {
+class FavouritesLinesAdapter (private val inputData: ArrayList<String>, classContext: Context, view: View):
+        RecyclerView.Adapter<FavouritesLinesAdapter.MyViewHolder>() {
     private val appContext: Context = classContext
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouritesStopsAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouritesLinesAdapter.MyViewHolder {
         // create a new view
         val cardView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.favs_stop_card, parent, false) as CardView
+                .inflate(R.layout.favs_line_card, parent, false) as CardView
         // set the view's size, margins, paddings and layout parameters
 
         return MyViewHolder(cardView)
     }
 
-    override fun onBindViewHolder(holder: FavouritesStopsAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavouritesLinesAdapter.MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
         val responseData = JSONObject(inputData[position])
 
         holder.cardView.findViewById<TextView>(R.id.lineName).text = responseData.getString("name")
-        //holder.cardView.findViewById<TextView>(R.id.linesList).text = responseData.getString("lines")
+        //holder.cardView.findViewById<TextView>(R.id.linesList).text = responseData.getString("line_stops")
         holder.cardView.findViewById<ImageView>(R.id.favStar).setImageResource(R.drawable.ic_star_select)
 
-        val cardContent: ConstraintLayout = holder.cardView.findViewById(R.id.stopContent)
+        val cardContent: ConstraintLayout = holder.cardView.findViewById(R.id.lineContent)
         cardContent.setOnClickListener {
-            val clickIntent = Intent(appContext, MapsActivity::class.java)
-            clickIntent.putExtra("stopid", responseData.getString("code").toInt())
-            appContext.startActivity(clickIntent)
+                val clickIntent = Intent(appContext, LinePopup::class.java)
+                clickIntent.putExtra("stopcontent", responseData.getString("line_stops"))
+                appContext.startActivity(clickIntent)
+
         }
     }
 

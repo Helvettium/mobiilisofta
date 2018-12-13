@@ -29,6 +29,7 @@
         android:backgroundTint="@color/colorPrimary"
         android:backgroundTintMode="src_in"
         android:text="Stops"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/favouritesTitle" />
@@ -43,22 +44,11 @@
         android:backgroundTint="@color/colorPrimary"
         android:backgroundTintMode="src_in"
         android:text="Lines"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/favStopsRecycle" />
-
-    <Button
-        android:id="@+id/newLineButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Add new favourite line"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favouriteLinesTitle" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/favStopsRecycle"
@@ -73,6 +63,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/favouriteStopsTitle"
         app:layout_constraintVertical_bias="0.066" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/favLinesRecycle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favouriteLinesTitle" />
 
 
 </android.support.constraint.ConstraintLayout>

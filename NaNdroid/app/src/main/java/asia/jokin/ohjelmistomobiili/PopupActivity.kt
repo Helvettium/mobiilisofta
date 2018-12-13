@@ -1,5 +1,6 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
@@ -75,6 +76,7 @@ class PopupActivity : AppCompatActivity() {
         })
     }
 
+    @SuppressLint("ApplySharedPref")
     private fun changeFavStatus(favStar: ImageView, itemCode: String, itemName: String, itemLines: String){
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)!!
         val stopString = preferences.getString("favs_array_stops","[]")
@@ -89,7 +91,7 @@ class PopupActivity : AppCompatActivity() {
 
                         val editor: SharedPreferences.Editor = preferences.edit()
                         editor.putString("favs_array_stops", stopArray.toString())
-                        editor.apply()
+                        editor.commit()
 
                         return
                     }
@@ -104,7 +106,7 @@ class PopupActivity : AppCompatActivity() {
             Log.e("changeFavStatus","status added with "+newObject.toString())
             val editor: SharedPreferences.Editor = preferences.edit()
             editor.putString("favs_array_stops", stopArray.toString())
-            editor.apply()
+            editor.commit()
         }
 
     }

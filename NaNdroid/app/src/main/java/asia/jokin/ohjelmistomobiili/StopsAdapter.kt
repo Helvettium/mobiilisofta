@@ -1,5 +1,6 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -65,7 +66,7 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
                 adapter = viewAdapter
             }
         }
-        holder.cardView.findViewById<TextView>(R.id.stopName).text = responseData.getString("name_fi")
+        holder.cardView.findViewById<TextView>(R.id.lineName).text = responseData.getString("name_fi")
 
         val favStar: ImageView = holder.cardView.findViewById(R.id.favStar)
         setFavIcon(favStar,responseData.getString("code"))
@@ -85,6 +86,7 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
         }
     }
 
+    @SuppressLint("ApplySharedPref")
     private fun changeFavStatus(favStar: ImageView, itemCode: String, itemName: String, itemLines: String){
         val stopString = preferences.getString("favs_array_stops","[]")
         if (stopString != ""){
@@ -98,7 +100,7 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
 
                         val editor: SharedPreferences.Editor = preferences.edit()
                         editor.putString("favs_array_stops", stopArray.toString())
-                        editor.apply()
+                        editor.commit()
 
                         return
                     }
@@ -113,7 +115,7 @@ class StopsAdapter (private val inputData: ArrayList<String>, classContext: Cont
             Log.e("changeFavStatus","status added with "+newObject.toString())
             val editor: SharedPreferences.Editor = preferences.edit()
             editor.putString("favs_array_stops", stopArray.toString())
-            editor.apply()
+            editor.commit()
         }
 
     }
