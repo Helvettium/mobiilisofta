@@ -84,7 +84,7 @@ class FetchDataSingleton private constructor(context: Context) {
                         callback.onSuccess(response, context)
                     },
                     Response.ErrorListener { response ->
-                        // Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                        System.err.println(response)
                     })
 
             // Add the request to the RequestQueue.
@@ -117,7 +117,7 @@ class FetchDataSingleton private constructor(context: Context) {
                         callback.onSuccess(response, context)
                     },
                     Response.ErrorListener { response ->
-                        Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                        System.err.println(response)
                     })
 
             // Add the request to the RequestQueue.
@@ -147,7 +147,7 @@ class FetchDataSingleton private constructor(context: Context) {
                         callback.onSuccess(response, context)
                     },
                     Response.ErrorListener { response ->
-                        Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                        System.err.println(response)
                     })
 
             // Add the request to the RequestQueue.
@@ -172,11 +172,13 @@ class FetchDataSingleton private constructor(context: Context) {
         if (now.after(closestTime) == true) {
             var stopsData = JSONArray() //JSONArray for the return value
 
+            @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
             FetchDataSingleton.getInstance(context).getStopsData(latlng, 400, object: DataCallback{ //make a getStopsData call
                 override fun onSuccess(stops: JSONArray, context: Context) {
                     for (i in 0..stops.length()-1) { //loop through the stops in response
                         val item = stops.getJSONObject(i) //get JSONObject in position i
                         val stopcode = item.get("code").toString().toInt() //get code value from item
+                        @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
                         FetchDataSingleton.getInstance(context).getStopData(stopcode, object : DataCallback { //make a getStopData call for given stopcode
                             override fun onSuccess(stop: JSONArray, context: Context) {
                                 if (stop.getJSONObject(0).get("departures")!="")
