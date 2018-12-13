@@ -2,18 +2,14 @@ package asia.jokin.ohjelmistomobiili
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.ActivityCompat
+import android.support.design.widget.Snackbar
 import android.support.v4.view.ViewPager
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import android.support.design.widget.Snackbar
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.LayerDrawable
-
 
 
 class FrontPage : AppCompatActivity() {

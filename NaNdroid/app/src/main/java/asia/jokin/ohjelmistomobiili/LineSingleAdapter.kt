@@ -6,17 +6,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import org.json.JSONArray
 import org.json.JSONObject
-import org.w3c.dom.Text
 
 class LineSingleAdapter (private val inputData: ArrayList<String>, classContext: Context):
         RecyclerView.Adapter<LineSingleAdapter.MyViewHolder>() {
