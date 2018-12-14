@@ -19,13 +19,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        LocationSingleton.startUpdates(this)
-
         checkPermission()
+        LocationSingleton.startUpdates(this.applicationContext)
+
         setTimerTask()
         timer.schedule(timerTask, 100, 1000)
-
-
     }
 
     private fun checkPermission(){
