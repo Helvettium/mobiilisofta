@@ -206,7 +206,7 @@ class FetchDataSingleton private constructor(context: Context) {
                     callback.onSuccess(parseData(response), context)
                 },
                 Response.ErrorListener { response ->
-                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                    System.err.println("Error in retrieving general messages $response")
                 })
 
         // Add the request to the RequestQueue.
