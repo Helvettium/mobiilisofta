@@ -12,21 +12,20 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.maps.model.*
-import kotlinx.android.synthetic.main.popup_fragment.*
 import org.json.JSONArray
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
     private var mStops: MutableList<String> = mutableListOf()
     private lateinit var mMap: GoogleMap
+    private lateinit var mPopup: PopupFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        // Piilotetaan pysäkki-popup
-        val manager = fragmentManager
-        val popup = manager.findFragmentById(R.id.popup)
-        manager.beginTransaction().hide(popup).commit()
+        // Alustetaan muuttujat, piilotetaan pysäkki-popup
+        mPopup = supportFragmentManager.findFragmentById(R.id.popup) as PopupFragment
+        supportFragmentManager.beginTransaction().hide(mPopup).commit()
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -110,19 +109,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
 
     private fun openStop(aCode: String) {
 
-        Toast.makeText(this, "click", Toast.LENGTH_LONG).show()
+        //Toast.makeText(this, "click", Toast.LENGTH_LONG).show()
 
         // Vitun raivostuttava tapa viitata ID
-        popupTitle.text = aCode
+        // popupTitle.text = aCode
 
-        val manager = fragmentManager
-        val fragment = manager.findFragmentById(R.id.popup)
+        //val popupFragment = supportFragmentManager.findFragmentById(R.id.popup) as PopupFragment
+        //supportFragmentManager.beginTransaction().hide(popupFragment).commit()
 
+        mPopup.showStop(aCode)
 
-        if (fragment.isHidden) {
-            manager.beginTransaction()
+        if (mPopup.isHidden) {
+            supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.animator.popup_show, android.R.animator.fade_out)
-                    .show(fragment)
+                    .show(mPopup)
                     .commit()
         }
     }

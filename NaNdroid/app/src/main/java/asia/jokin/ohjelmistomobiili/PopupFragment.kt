@@ -1,17 +1,34 @@
 package asia.jokin.ohjelmistomobiili
 
-import android.app.Fragment
+import android.support.v4.app.Fragment
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 
 class PopupFragment : Fragment() {
+    private lateinit var mTitleText: TextView
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mViewAdapter: RecyclerView.Adapter<*>
+    private lateinit var mViewManager: RecyclerView.LayoutManager
+
     override fun onCreateView(aInflater: LayoutInflater, aContainer: ViewGroup?, aSavedInstanceState: Bundle?): View? {
+
         return aInflater.inflate(R.layout.popup_fragment, aContainer, false)
     }
 
-    fun showStop(aStopCode: String) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        mTitleText = view.findViewById(R.id.popupTitle)
+    }
+
+    fun showStop(aStopCode: String) {
+        //Toast.makeText(this, "click", Toast.LENGTH_LONG).show()
+
+        // Vitun raivostuttava tapa viitata ID
+        mTitleText.text = aStopCode
     }
 }
