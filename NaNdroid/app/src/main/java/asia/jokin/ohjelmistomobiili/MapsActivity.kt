@@ -116,6 +116,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
 
         Toast.makeText(this, "click", Toast.LENGTH_LONG).show()
 
+        // Vitun raivostuttava tapa viitata ID
+        popupTitle.text = aCode
+
         val manager = fragmentManager
         val fragment = manager.findFragmentById(R.id.popup)
 
