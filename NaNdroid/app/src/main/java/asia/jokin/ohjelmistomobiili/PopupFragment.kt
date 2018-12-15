@@ -38,7 +38,7 @@ class PopupFragment : Fragment() {
                 mTitleText.text = stopData.get("name_fi").toString()
 
 
-
+                Log.d("JSONArray", response.toString())
 
                 // Do stuff
                 /*
