@@ -1,6 +1,5 @@
 package asia.jokin.ohjelmistomobiili
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
@@ -122,22 +121,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         val manager = fragmentManager
         val fragment = manager.findFragmentById(R.id.popup)
 
+
        // val ft = supportFragmentManager.beginTransaction()
         //ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
 
         if (fragment.isHidden) {
             manager.beginTransaction()
-                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .setCustomAnimations(R.animator.popup_show, android.R.animator.fade_out)
                     .show(fragment)
                     .commit()
         }
+
+        /*
         else {
             manager.beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                     .hide(fragment)
                     .commit()
         }
-
+        */
 
 
         /*
