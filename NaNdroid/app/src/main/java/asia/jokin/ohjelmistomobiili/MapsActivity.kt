@@ -78,23 +78,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         return true
     }
 
-    private fun updateStops(mLatLng: LatLng) {
-        // Tyhjennetään vanhat merkit  -  Tutkitaan onko parempi jättää lojumaan?
-        // mMap.clear()
-
+    private fun updateStops(aLatLng: LatLng) {
         // Haetaan pysäkit
-        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(mLatLng, 1000, object: DataCallback{
+        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(aLatLng, 1000, object: DataCallback{
             override fun onSuccess(response: JSONArray, context: Context) {
 
                 // Iteroidaan palautettu lista
                 for(i in 0 until response.length()) {
-                    val mCode = response.getJSONObject(i).getString("code")
+                    val stopCode = response.getJSONObject(i).getString("code")
 
                     // Onko pysäkki jo kartassa?
-                    if (!mStops.contains(mCode)) {
+                    if (!mStops.contains(stopCode)) {
 
                         // Pysäkki listaan
-                        mStops.add(mCode)
+                        mStops.add(stopCode)
 
                         // Koordinaatit tulee stringinä
                         val coords = response.getJSONObject(i).getString("coords").split(",")
@@ -122,36 +119,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         val fragment = manager.findFragmentById(R.id.popup)
 
 
-       // val ft = supportFragmentManager.beginTransaction()
-        //ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-
         if (fragment.isHidden) {
             manager.beginTransaction()
                     .setCustomAnimations(R.animator.popup_show, android.R.animator.fade_out)
                     .show(fragment)
                     .commit()
         }
-
-        /*
-        else {
-            manager.beginTransaction()
-                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                    .hide(fragment)
-                    .commit()
-        }
-        */
-
-
-        /*
-        val firstFragment = PopupFragment()
-        firstFragment.arguments = intent.extras
-        val transaction = fragmentManager.beginTransaction()
-        transaction.add(R.layout.activity_maps, firstFragment)
-        transaction.commit()
-
-        val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
-        popupIntent.putExtra("stopid", mCode.toInt())
-        startActivity(popupIntent)
-        */
     }
 }

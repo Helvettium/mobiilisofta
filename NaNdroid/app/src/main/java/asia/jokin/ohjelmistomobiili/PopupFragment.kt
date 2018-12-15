@@ -7,14 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 
 class PopupFragment : Fragment() {
-
-    /*
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_maps)
-    }
-    */
-
     override fun onCreateView(aInflater: LayoutInflater, aContainer: ViewGroup?, aSavedInstanceState: Bundle?): View? {
         return aInflater.inflate(R.layout.popup_fragment, aContainer, false)
     }
