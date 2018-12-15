@@ -36,7 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         // Mihin kartan pitäisi alussa osoittaa
         val lat = intent.getDoubleExtra("lat", LocationSingleton.getLat())
         val lng = intent.getDoubleExtra("lng", LocationSingleton.getLng())
-        val mLatLng = LatLng(lat, lng)
+        mLatLng = LatLng(lat, lng)
 
         // Kartta itse
         mMap = googleMap
@@ -108,7 +108,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
 
     private fun openStop(aCode: Int) {
         // Näytetään pysäkin tiedot
-        mPopup.showStop(aCode)
+        mPopup.showStop(aCode, this.applicationContext)
 
         // Jos fragment on vielä piilossa, tuodaan se näkyviin
         if (mPopup.isHidden) {

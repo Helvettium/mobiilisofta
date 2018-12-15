@@ -10,7 +10,11 @@
         android:id="@+id/popupTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:background="@color/colorPrimary"
+        android:padding="8dp"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -18,7 +22,6 @@
         android:id="@+id/popupRCV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popupTitle" />
 
