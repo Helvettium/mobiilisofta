@@ -23,8 +23,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         setContentView(R.layout.activity_maps)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        // val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        // mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -106,6 +106,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
     }
 
     private fun openStop(mCode: String) {
+
+        val firstFragment = PopupFragment()
+        firstFragment.arguments = intent.extras
+        val transaction = fragmentManager.beginTransaction()
+        transaction.add(R.layout.activity_maps, firstFragment)
+        transaction.commit()
+
         val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
         popupIntent.putExtra("stopid", mCode.toInt())
         startActivity(popupIntent)
