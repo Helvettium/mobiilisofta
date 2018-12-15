@@ -3,6 +3,7 @@ package asia.jokin.ohjelmistomobiili
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PopupFragment : Fragment() {
+    private lateinit var mJSONData: JSONArray
     private lateinit var mTitleText: TextView
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mViewAdapter: RecyclerView.Adapter<*>
@@ -27,9 +29,13 @@ class PopupFragment : Fragment() {
         super.onViewCreated(aView, aSavedInstanceState)
 
         mTitleText = aView.findViewById(R.id.popupTitle)
+        mRecyclerView = aView.findViewById(R.id.popupRCV)
+        mViewAdapter = PopupAdapter(mJSONData)
+        mViewManager = LinearLayoutManager(activity)
     }
 
     fun showStop(aStopCode: Int, aApplicationContext: Context) {
+
 
         // Haetaan pysäkin tiedot
         FetchDataSingleton.getInstance(aApplicationContext).getStopData(aStopCode, object: DataCallback {
