@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_alerts"
-        android:icon="@drawable/ic_alert_glyph"
+        android:icon="@drawable/action_alert_icon"
         android:title="alerts"
         app:showAsAction="always"/>
 

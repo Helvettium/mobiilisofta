@@ -9,33 +9,39 @@ import android.view.ViewGroup
 import android.widget.TextView
 import org.json.JSONObject
 
-class BusStopAdapter (private val inputData: ArrayList<String>, classContext: Context, this_bus: String):
-        RecyclerView.Adapter<BusStopAdapter.MyViewHolder>() {
+class LineContentAdapter (private val inputData: ArrayList<String>, classContext: Context):
+        RecyclerView.Adapter<LineContentAdapter.MyViewHolder>() {
     private val appContext: Context = classContext
-    private val thisBus: String = this_bus
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BusStopAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineContentAdapter.MyViewHolder {
         // create a new view
         val listView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.bus_stop_row, parent, false) as ConstraintLayout
+                .inflate(R.layout.line_card_content, parent, false) as ConstraintLayout
         // set the view's size, margins, paddings and layout parameters
 
         return MyViewHolder(listView)
     }
 
-    override fun onBindViewHolder(holder: BusStopAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LineContentAdapter.MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        val responseData = JSONObject(inputData[position])
-        holder.itemView.findViewById<TextView>(R.id.stopBusDest).text = responseData.getString("name1")
-        holder.itemView.findViewById<TextView>(R.id.stopBusNr).text = responseData.getString("code")
-        holder.itemView.findViewById<TextView>(R.id.stopBusArrival).text = parseTime(responseData.getString("time"))
 
-        val busStopsContent: ConstraintLayout = holder.itemView.findViewById(R.id.stopLayout)
-        busStopsContent.setOnClickListener{
+        val responseData = JSONObject(inputData[position])
+        val timeFromStart: TextView = holder.itemView.findViewById(R.id.timeFromStart)
+        val lineStopName: TextView = holder.itemView.findViewById(R.id.lineStopName)
+        val lineListItem: ConstraintLayout = holder.itemView.findViewById(R.id.lineContentConstraint)
+
+        timeFromStart.text = responseData.getInt("time").toString()
+        lineStopName.text = responseData.getString("name")
+        if (position%2==1){
+            lineListItem.setBackgroundColor(holder.itemView.resources.getColor(R.color.lightGrey))
+            //lineListItem.setBackgroundColor(R.color.lightGrey)
+        }
+
+        lineListItem.setOnClickListener{
             val clickIntent = Intent(appContext, MapsActivity::class.java)
-            clickIntent.putExtra("stopid", thisBus.toInt())
+            clickIntent.putExtra("stopid", responseData.getString("code").toInt())
             appContext.startActivity(clickIntent)
         }
     }
@@ -45,10 +51,6 @@ class BusStopAdapter (private val inputData: ArrayList<String>, classContext: Co
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
     class MyViewHolder(listView: ConstraintLayout) : RecyclerView.ViewHolder(listView)
-
-    private fun parseTime(timeString: String): String {
-        return timeString.substring(0,2)+":"+timeString.substring(2)
-    }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = inputData.size

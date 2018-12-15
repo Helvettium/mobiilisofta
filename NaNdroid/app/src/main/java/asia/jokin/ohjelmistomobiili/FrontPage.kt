@@ -1,17 +1,20 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.ActivityCompat
+import android.support.design.widget.Snackbar
 import android.support.v4.view.ViewPager
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+
 
 class FrontPage : AppCompatActivity() {
-
+    private val fetchManager = FetchDataSingleton
+    private var alerts: ArrayList<Alert> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +32,6 @@ class FrontPage : AppCompatActivity() {
             val adapter = ViewPagerAdapter(supportFragmentManager)
             viewPager.adapter = adapter
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -41,10 +43,17 @@ class FrontPage : AppCompatActivity() {
         }
 
         R.id.action_alerts -> {
-            // User chose the "Alerts" action, mark the current item
-            val startupIntent = Intent(this, AlertsActivity::class.java)
-            startActivity(startupIntent)
-            true
+            // User chose the "Alerts" action, show alerts or a snackbar
+            if (!alerts.isEmpty()) {
+                val startupIntent = Intent(this, AlertsActivity::class.java)
+                startupIntent.putExtra("alertsData", alerts)
+                startActivity(startupIntent)
+                true
+            } else {
+                val noAlertsSnackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), R.string.no_alerts_active, Snackbar.LENGTH_SHORT)
+                noAlertsSnackbar.show()
+                false
+            }
         }
 
         else -> {
@@ -53,14 +62,48 @@ class FrontPage : AppCompatActivity() {
             super.onOptionsItemSelected(item)
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.toolbar, menu)
+        setCount(this, "0", menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onBackPressed() {
         this.finishAffinity()
         super.onBackPressed()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        // Get alerts and enable button if there are any
+        fetchManager.getInstance(this.applicationContext).getGeneralMessages(object : AlertDataCallback {
+            override fun onSuccess(response: ArrayList<Alert>, context: Context) {
+                alerts = response
+                setCount(this@FrontPage ,alerts.size.toString(10), menu)
+            }
+        })
+        invalidateOptionsMenu()
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    fun setCount(context: Context, count: String, menu: Menu?) {
+        val menuItem = menu?.findItem(R.id.action_alerts)
+        val icon = menuItem?.icon as LayerDrawable
+
+        val badge: CountDrawable
+
+        // Reuse drawable if possible
+        val reuse = icon.findDrawableByLayerId(R.id.ic_alert_count)
+
+        badge = if (reuse != null && reuse is CountDrawable) {
+            reuse
+        } else {
+            CountDrawable(context)
+        }
+
+        badge.setCount(count)
+        icon.mutate()
+        icon.setDrawableByLayerId(R.id.ic_alert_count, badge)
     }
 }

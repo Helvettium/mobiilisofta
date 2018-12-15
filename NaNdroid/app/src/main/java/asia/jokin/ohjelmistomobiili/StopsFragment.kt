@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.android.gms.maps.model.LatLng
 import org.json.JSONArray
 import java.util.*
@@ -40,7 +39,7 @@ class StopsFragment : Fragment() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         val currentLocation = LatLng(LocationSingleton.getLat(),LocationSingleton.getLng())
-        Toast.makeText(this@StopsFragment.activity,currentLocation.latitude.toString(),Toast.LENGTH_LONG).show()
+        //Toast.makeText(this@StopsFragment.activity,currentLocation.latitude.toString()+", "+currentLocation.longitude.toString(),Toast.LENGTH_LONG).show()
 
         viewManager = LinearLayoutManager(activity)
 
@@ -75,9 +74,7 @@ class StopsFragment : Fragment() {
         timerTask = object : TimerTask() {
             override fun run() {
                 handler.post {
-
                     drawStops(view)
-
                 }
             }
         }

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.popup_card.view.*
 
-class PopupAdapter (val lines : ArrayList<String>, val arrivals : ArrayList<String>, val context: Context): RecyclerView.Adapter<PopupAdapter.ViewHolder>() {
+class PopupAdapter (private val lines : ArrayList<String>, private val arrivals : ArrayList<String>, val context: Context): RecyclerView.Adapter<PopupAdapter.ViewHolder>() {
     // Gets the number of animals in the list
     override fun getItemCount(): Int {
         return lines.size
@@ -20,14 +20,14 @@ class PopupAdapter (val lines : ArrayList<String>, val arrivals : ArrayList<Stri
 
     // Binds each animal in the ArrayList to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder?.dest?.text = lines.get(position)
-        holder?.arrival?.text = arrivals.get(position)
+        holder.dest?.text = lines[position]
+        holder.arrival?.text = arrivals[position]
     }
 
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
         // Holds the TextView that will add each animal to
-        val dest = view.stopBusDest
-        val arrival = view.stopBusArrival
+        val dest = view.stopBusDest!!
+        val arrival = view.stopBusArrival!!
     }
 }
 

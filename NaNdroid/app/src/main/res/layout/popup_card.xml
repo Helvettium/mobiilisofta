@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="4dp"
             android:stretchColumns="0,1"
-            card_view:layout_constraintTop_toBottomOf="@+id/stopName"
+            card_view:layout_constraintTop_toBottomOf="@+id/lineName"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" >
 

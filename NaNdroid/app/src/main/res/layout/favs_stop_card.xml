@@ -7,11 +7,11 @@
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
     android:clickable="true"
+    android:focusable="true"
     card_view:cardBackgroundColor="@color/backGroundWhite"
     card_view:cardCornerRadius="0dp"
     card_view:cardElevation="0dp"
-    card_view:contentPadding="0dp"
-    android:focusable="true">
+    card_view:contentPadding="0dp">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/stopContent"
@@ -31,13 +31,6 @@
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/stopRecycle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
-            card_view:layout_constraintTop_toBottomOf="@+id/lineName" />
-
         <ImageView
             android:id="@+id/favStar"
             android:layout_width="32dp"
@@ -45,7 +38,7 @@
             android:layout_marginEnd="4dp"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
-            card_view:srcCompat="@drawable/ic_star_unselect" />
+            card_view:srcCompat="@drawable/ic_star_select" />
 
     </android.support.constraint.ConstraintLayout>
 

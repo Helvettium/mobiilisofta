@@ -23,7 +23,7 @@ class AlertCardAdapter (private val inputData: ArrayList<Alert>):
                                     viewType: Int): AlertCardAdapter.MyViewHolder {
         // create a new view
         val cardView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.generic_card, parent, false) as CardView
+                .inflate(R.layout.alert_card, parent, false) as CardView
         // set the view's size, margins, paddings and layout parameters
 
         return MyViewHolder(cardView)
@@ -34,11 +34,11 @@ class AlertCardAdapter (private val inputData: ArrayList<Alert>):
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         val timePeriod = "${parseTime(inputData[position].recordedAt)} - ${parseTime(inputData[position].validUntil)}"
-        holder.cardView.findViewById<TextView>(R.id.stopName).text = timePeriod
-        holder.cardView.findViewById<TextView>(R.id.cardText).text = inputData[position].content
+        holder.cardView.findViewById<TextView>(R.id.alertTitle).text = timePeriod
+        holder.cardView.findViewById<TextView>(R.id.alertText).text = inputData[position].content
     }
 
-    fun parseTime(time: Long): String {
+    private fun parseTime(time: Long): String {
         val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale("fi"))
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = time
