@@ -11,7 +11,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import org.json.JSONObject
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.google.android.gms.maps.model.*
+import kotlinx.android.synthetic.main.popup_fragment.*
 import org.json.JSONArray
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
@@ -22,9 +24,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
+        // Piilotetaan pysäkki-popup
+        val manager = fragmentManager
+        val popup = manager.findFragmentById(R.id.popup)
+        manager.beginTransaction().hide(popup).commit()
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        // val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        // mapFragment.getMapAsync(this)
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -105,8 +112,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         })
     }
 
-    private fun openStop(mCode: String) {
+    private fun openStop(aCode: String) {
 
+        Toast.makeText(this, "click", Toast.LENGTH_LONG).show()
+
+        val manager = fragmentManager
+        val fragment = manager.findFragmentById(R.id.popup)
+
+       // val ft = supportFragmentManager.beginTransaction()
+        //ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+
+        if (fragment.isHidden) {
+            manager.beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .show(fragment)
+                    .commit()
+        }
+        else {
+            manager.beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .hide(fragment)
+                    .commit()
+        }
+
+
+
+        /*
         val firstFragment = PopupFragment()
         firstFragment.arguments = intent.extras
         val transaction = fragmentManager.beginTransaction()
@@ -116,5 +147,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
         popupIntent.putExtra("stopid", mCode.toInt())
         startActivity(popupIntent)
+        */
     }
 }

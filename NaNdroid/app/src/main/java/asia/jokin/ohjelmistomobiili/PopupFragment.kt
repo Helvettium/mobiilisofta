@@ -15,10 +15,11 @@ class PopupFragment : Fragment() {
     }
     */
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(aInflater: LayoutInflater, aContainer: ViewGroup?, aSavedInstanceState: Bundle?): View? {
+        return aInflater.inflate(R.layout.popup_fragment, aContainer, false)
+    }
 
-        val view = inflater.inflate(R.layout.stops_fragment, container, false)
+    fun showStop(aStopCode: String) {
 
-        return view
     }
 }
