@@ -1,5 +1,6 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -22,6 +23,7 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
     private lateinit var dateEditText: EditText
     private lateinit var departureRadioButton: RadioButton
     private val arrivalRadioButton: RadioButton? = view?.findViewById(R.id.routeOnArrivalRadioButton)
+    private lateinit var routesOriginEditText: EditText
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -35,17 +37,6 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
 
         val routesOriginAutoComplete = view.findViewById<AutoCompleteTextView>(R.id.routesOriginTextInput)
         ArrayAdapter<String>(this.context, android.R.layout.simple_list_item_1, stops).also { adapter -> routesOriginAutoComplete.setAdapter(adapter)}
-
-/*        dateEditText.setOnClickListener {
-            val tpd = TabbedDialog()
-            tpd.show(this.activity?.supportFragmentManager, "DateTimePickerDialog")
-*//*            val fm = this.activity?.supportFragmentManager
-            fm!!.beginTransaction()
-                    .show(tpd)
-                    .commit()*//*
-            //tpd.show(this.activity?.fragmentManager, "TimePickerDialog")
-            println("clicked")
-        }*/
 
         timeEditText.setOnClickListener {
             val tpd = TimePickerDialog.newInstance(
@@ -70,6 +61,9 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
         departureRadioButton = view.findViewById(R.id.routeOnDepartureTimeRadioButton)
         departureRadioButton.isChecked = true
 
+        routesOriginEditText = view.findViewById<EditText>(R.id.routesOriginTextInput)
+        routesOriginEditText.setOnClickListener { startActivityForResult(Intent(this.context, RouteLocationPickerActivity::class.java), 1) }
+
         val searchRoutesButton = view.findViewById<Button>(R.id.routesSearchRouteButton)
         searchRoutesButton.setOnClickListener { v -> startActivity(Intent(this.context, RouteResultsActivity::class.java)) }
         return view
@@ -86,5 +80,15 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
         mTime.set(Calendar.MONTH, monthOfYear)
         mTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         dateEditText.setText(mDateFormatter.format(mTime.time))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                println("saatu dataa")
+                println(data?.getStringExtra("locationName"))
+                routesOriginEditText.setText(data?.getStringExtra("locationName"))
+            }
+        }
     }
 }
