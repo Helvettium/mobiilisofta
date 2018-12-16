@@ -29,7 +29,7 @@ class PopupActivity : AppCompatActivity() {
         // Creates a vertical Layout Manager
         rcv_busses.layoutManager = LinearLayoutManager(this)
         val txtName: TextView = findViewById(R.id.txtName) //stop name text view
-        rcv_busses.adapter = PopupAdapter(exampleData1, exampleData2,this)
+        //rcv_busses.adapter = PopupAdapter(exampleData1, exampleData2,this)
 
         val stopcode = intent.getIntExtra("stopid",0)
         // val stopcode = "0035" // Keskustori C
@@ -127,6 +127,6 @@ class PopupActivity : AppCompatActivity() {
     }
 
     fun addData(lines: ArrayList<String>, arrivals: ArrayList<String>) {
-        rcv_busses.adapter = PopupAdapter(lines, arrivals, this)
+        //rcv_busses.adapter = PopupAdapter(lines, arrivals, this)
     }
 }

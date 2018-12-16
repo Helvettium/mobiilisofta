@@ -64,5 +64,6 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
-# Android Studio VCS Integration
+# Android Studio VCS Integration & Build checksums
 NaNdroid/.idea/vcs.xml
+NaNdroid/.idea/caches/build_file_checksums.ser
