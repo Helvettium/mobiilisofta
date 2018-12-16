@@ -6,16 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.popup_card.view.*
+import org.json.JSONArray
 
-class PopupAdapter (private val lines : ArrayList<String>, private val arrivals : ArrayList<String>, val context: Context): RecyclerView.Adapter<PopupAdapter.ViewHolder>() {
+//class PopupAdapter (private val lines : ArrayList<String>, private val arrivals : ArrayList<String>, val context: Context): RecyclerView.Adapter<PopupAdapter.ViewHolder>() {
+
+class PopupAdapter(private var aJSONData: JSONArray): RecyclerView.Adapter<PopupAdapter.ViewHolder>() {
+
     // Gets the number of animals in the list
     override fun getItemCount(): Int {
-        return lines.size
+        return aJSONData.length()
     }
 
     // Inflates the item views
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.popup_card, parent, false))
+    override fun onCreateViewHolder(aParent: ViewGroup, aViewType: Int): ViewHolder {
+        return ViewHolder(LayoutInflater.from(aParent.context).inflate(R.layout.popup_row, aParent, false))
     }
 
     // Binds each animal in the ArrayList to a view
@@ -30,4 +34,3 @@ class PopupAdapter (private val lines : ArrayList<String>, private val arrivals 
         val arrival = view.stopBusArrival!!
     }
 }
-

@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PopupFragment : Fragment() {
+    private val mLines: MutableList<PopupLine> = mutableListOf()
+    private val mDepartures: MutableList<PopupDeparture> = mutableListOf()
     private lateinit var mJSONData: JSONArray
     private lateinit var mTitleText: TextView
     private lateinit var mRecyclerView: RecyclerView
@@ -28,10 +30,14 @@ class PopupFragment : Fragment() {
     override fun onViewCreated(aView: View, aSavedInstanceState: Bundle?) {
         super.onViewCreated(aView, aSavedInstanceState)
 
-        mTitleText = aView.findViewById(R.id.popupTitle)
-        mRecyclerView = aView.findViewById(R.id.popupRCV)
         mViewAdapter = PopupAdapter(mJSONData)
         mViewManager = LinearLayoutManager(activity)
+        mTitleText = aView.findViewById(R.id.popupTitle)
+        mRecyclerView = aView.findViewById<RecyclerView>(R.id.popupRCV).apply {
+            setHasFixedSize(true)
+            layoutManager = mViewManager
+            adapter = mViewAdapter
+        }
     }
 
     fun showStop(aStopCode: Int, aApplicationContext: Context) {
