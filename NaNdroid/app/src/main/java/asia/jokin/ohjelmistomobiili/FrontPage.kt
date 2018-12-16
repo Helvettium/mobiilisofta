@@ -31,6 +31,8 @@ class FrontPage : AppCompatActivity() {
         if (viewPager != null) {
             val adapter = ViewPagerAdapter(supportFragmentManager)
             viewPager.adapter = adapter
+            // Move pager to favourites tab
+            viewPager.currentItem = 1
         }
     }
 
