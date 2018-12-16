@@ -11,12 +11,13 @@
         android:layout_width="227dp"
         android:layout_height="39dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:text="Search"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/destinationTextInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/originTextInputLayout"
@@ -69,7 +70,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="372dp"
-        android:layout_height="276dp"
+        android:layout_height="169dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -78,5 +79,62 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/routesSearchRouteButton" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="220dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeEditText">
+
+        <RadioButton
+            android:id="@+id/routeOnDepartureTimeRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Departure" />
+
+        <RadioButton
+            android:id="@+id/routeOnArrivalRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Arrival" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/timeEditText"
+        style="@android:style/Widget.Material.EditText"
+        android:layout_width="102dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:inputType="none"
+        android:text="Date"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/destinationTextInputLayout" />
+
+    <EditText
+        android:id="@+id/dateEditText"
+        style="@android:style/Widget.Material.EditText"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="80dp"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:inputType="none"
+        android:text="Date"
+        android:focusable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/destinationTextInputLayout" />
 
 </android.support.constraint.ConstraintLayout>
