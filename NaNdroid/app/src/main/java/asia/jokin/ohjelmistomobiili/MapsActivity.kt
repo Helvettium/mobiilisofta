@@ -1,6 +1,7 @@
 package asia.jokin.ohjelmistomobiili
 
-import android.content.Intent
+import android.content.Context
+import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
@@ -8,21 +9,25 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import org.json.JSONObject
-import android.content.Context
-import android.util.Log
 import com.google.android.gms.maps.model.*
+import org.json.JSONObject
 import org.json.JSONArray
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
     private var mStops: MutableList<String> = mutableListOf()
     private lateinit var mMap: GoogleMap
+    private lateinit var mPopup: PopupFragment
+    private lateinit var mLatLng: LatLng
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate(aSavedInstanceState: Bundle?) {
+        super.onCreate(aSavedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Alustetaan & piilotetaan pysäkki-popup
+        mPopup = supportFragmentManager.findFragmentById(R.id.popup) as PopupFragment
+        supportFragmentManager.beginTransaction().hide(mPopup).commit()
+
+        // Kartta-fragment, ilmoitus itselle kun se on valmis
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
@@ -31,64 +36,60 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         // Mihin kartan pitäisi alussa osoittaa
         val lat = intent.getDoubleExtra("lat", LocationSingleton.getLat())
         val lng = intent.getDoubleExtra("lng", LocationSingleton.getLng())
-
-        val curLatLng = LatLng(lat, lng)
+        mLatLng = LatLng(lat, lng)
 
         // Kartta itse
         mMap = googleMap
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(LocationSingleton.getLat(), LocationSingleton.getLng()), 16.0F))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16.0F))
         mMap.setOnCameraIdleListener(this)
         mMap.setOnMarkerClickListener(this)
 
-        // Avataan mahdollinen valittu pysäkki
+        // Avataan pysäkki jos sellainen on valittu
         val stopCode = intent.getIntExtra("stopid", 0)
 
         if (stopCode != 0) {
-            openStop(stopCode.toString())
+            openStop(stopCode)
         }
 
-        // Päivitetään pysäkit
-        updateStops(curLatLng)
-
-        // Toast.makeText(context, mMarker.tag.toString(), Toast.LENGTH_LONG).show()
+        // Haetaan & näytetään lähialueen pysäkit
+        updateStops(mLatLng)
     }
 
     override fun onCameraIdle() {
-        // Minne kartta osoittaa
-        val curLatLng = mMap.getCameraPosition().target
+        // Minne kartta osoittaa kameran pysähtyessä
+        val newLatLng = mMap.getCameraPosition().target
 
-        // Tutkintaa onko kartta siirtynyt tarpeeksi?
+        // Tutkintaa onko kartta siirtynyt tarpeeksi
+        val distances = FloatArray(2)
+        Location.distanceBetween(mLatLng.latitude, mLatLng.longitude, newLatLng.latitude, newLatLng.longitude, distances)
 
-        // Päivitetään pysäkit
-        updateStops(curLatLng)
+        if (distances[0] > 10.0) {
+            mLatLng = newLatLng
+            updateStops(newLatLng)
+        }
     }
 
     override fun onMarkerClick(mMarker: Marker): Boolean {
-        // Debug
-        Log.d("Marker", mMarker.tag.toString())
-
-        openStop((mMarker.tag as JSONObject).getString("code"))
+        // Avataan valittu pysäkki, geneerinen tag -> json -> "code"-string -> int
+        openStop((mMarker.tag as JSONObject).getString("code").toInt())
 
         return true
     }
 
-    private fun updateStops(mLatLng: LatLng) {
-        // Tyhjennetään vanhat merkit  -  Tutkitaan onko parempi jättää lojumaan?
-        // mMap.clear()
-
+    private fun updateStops(aLatLng: LatLng) {
         // Haetaan pysäkit
-        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(mLatLng, 1000, object: DataCallback{
+        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(aLatLng, 1000, object: DataCallback {
             override fun onSuccess(response: JSONArray, context: Context) {
 
                 // Iteroidaan palautettu lista
                 for(i in 0 until response.length()) {
-                    val mCode = response.getJSONObject(i).getString("code")
+                    val stopCode = response.getJSONObject(i).getString("code")
 
                     // Onko pysäkki jo kartassa?
-                    if (!mStops.contains(mCode)) {
+                    if (!mStops.contains(stopCode)) {
 
                         // Pysäkki listaan
-                        mStops.add(mCode)
+                        mStops.add(stopCode)
 
                         // Koordinaatit tulee stringinä
                         val coords = response.getJSONObject(i).getString("coords").split(",")
@@ -105,9 +106,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         })
     }
 
-    private fun openStop(mCode: String) {
-        val popupIntent = Intent(this@MapsActivity, PopupActivity::class.java)
-        popupIntent.putExtra("stopid", mCode.toInt())
-        startActivity(popupIntent)
+    private fun openStop(aCode: Int) {
+        // Näytetään pysäkin tiedot
+        mPopup.updatePopup(aCode, this.applicationContext)
+
+        // Jos fragment on vielä piilossa, tuodaan se näkyviin
+        if (mPopup.isHidden) {
+            supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.animator.popup_show, android.R.animator.fade_out)
+                    .show(mPopup)
+                    .commit()
+        }
     }
 }
