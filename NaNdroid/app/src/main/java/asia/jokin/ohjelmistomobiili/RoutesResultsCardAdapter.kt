@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class RoutesResultsCardAdapter (private val inputData: List<List<Route>>, context: Context):
+class RoutesResultsCardAdapter (private val inputData: List<Route>, context: Context):
         RecyclerView.Adapter<RoutesResultsCardAdapter.MyViewHolder>() {
     private val mContext = context
     private var mInfoVisible = false
@@ -65,12 +65,12 @@ class RoutesResultsCardAdapter (private val inputData: List<List<Route>>, contex
         }
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.cardView.findViewById<TextView>(R.id.routeDepartsTextView).text = parseTime(inputData[position][0].legs.first().locs.first().depTime)
-        holder.cardView.findViewById<TextView>(R.id.routeArrivesTextView).text = parseTime(inputData[position][0].legs.last().locs.last().arrTime)
+        holder.cardView.findViewById<TextView>(R.id.routeDepartsTextView).text = parseTime(inputData[position].legs.first().locs.first().depTime)
+        holder.cardView.findViewById<TextView>(R.id.routeArrivesTextView).text = parseTime(inputData[position].legs.last().locs.last().arrTime)
 
         val legsViewManager = CustomGridLayoutManager(this.mContext, LinearLayoutManager.HORIZONTAL)
         legsViewManager.setScrollEnabled(false)
-        val legsViewAdapter = RoutesLegCardAdapter(inputData[position][0].legs)
+        val legsViewAdapter = RoutesLegCardAdapter(inputData[position].legs)
         val legsRecyclerView = holder.cardView.findViewById<RecyclerView>(R.id.routeLegsRecyclerView)
         legsRecyclerView.apply {
             // use this setting to improve performance if you know that changes
@@ -89,7 +89,7 @@ class RoutesResultsCardAdapter (private val inputData: List<List<Route>>, contex
             selectedIndicator.visibility = View.GONE
         }
 
-        val infoViewAdapter = RoutesInfoCardAdapter(combineLegs(inputData[position][0].legs))
+        val infoViewAdapter = RoutesInfoCardAdapter(combineLegs(inputData[position].legs))
         val infoRecyclerView = holder.cardView.findViewById<RecyclerView>(R.id.routeInfoRecyclerView)
         infoRecyclerView.apply {
             // use this setting to improve performance if you know that changes

@@ -1,15 +1,14 @@
 package asia.jokin.ohjelmistomobiili
 
-import android.content.Context
+import android.content.res.TypedArray
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import org.json.JSONObject
 
 class RouteResultsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
     private lateinit var recyclerView: RecyclerView
@@ -27,31 +26,23 @@ class RouteResultsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.
         mapView = supportFragmentManager.findFragmentById(R.id.routeInfoMap) as SupportMapFragment
         mapView.getMapAsync(this)
 
-        FetchDataSingleton.getInstance(this.applicationContext).getRouteResults(object: RoutesDataCallback {
-            override fun onSuccess(response: List<List<Route>>, context: Context) {
-                val fetchedData: List<List<Route>> = response
-                println(response)
+        val data = intent.getParcelableArrayListExtra<Route>("resultsData")
 
-                viewAdapter = RoutesResultsCardAdapter(fetchedData, context)
+        viewAdapter = RoutesResultsCardAdapter(data, this)
+        recyclerView = findViewById<RecyclerView>(R.id.routeResultsRecyclerVIew).apply {
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            setHasFixedSize(false)
 
-                recyclerView = findViewById<RecyclerView>(R.id.routeResultsRecyclerVIew).apply {
-                    // use this setting to improve performance if you know that changes
-                    // in content do not change the layout size of the RecyclerView
-                    setHasFixedSize(false)
+            // use a linear layout manager
+            layoutManager = viewManager
 
-                    // use a linear layout manager
-                    layoutManager = viewManager
-
-                    // specify an viewAdapter (see also next example)
-                    adapter = viewAdapter
-                }
-            }
-        })
+            // specify an viewAdapter (see also next example)
+            adapter = viewAdapter
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        println("kartta valmis")
-        // Mihin kartan pitäisi alussa osoittaa
         val lat = intent.getDoubleExtra("lat", LocationSingleton.getLat())
         val lng = intent.getDoubleExtra("lng", LocationSingleton.getLng())
 

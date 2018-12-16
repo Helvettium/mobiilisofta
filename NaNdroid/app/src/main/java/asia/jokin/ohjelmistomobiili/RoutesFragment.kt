@@ -1,15 +1,20 @@
 package asia.jokin.ohjelmistomobiili
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import kotlinx.android.synthetic.main.routes_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,10 +23,11 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
     private var mTime: Calendar = Calendar.getInstance()
     private val mTimeFormatter = SimpleDateFormat("HH:mm", Locale("fi"))
     private val mDateFormatter = SimpleDateFormat("dd.MM.yyyy", Locale("fi"))
+    private val mRequestTimeFormatter = SimpleDateFormat("HHmm", Locale("fi"))
+    private val mRequestDateFormatter = SimpleDateFormat("yyyyMMdd", Locale("fi"))
     private lateinit var timeEditText: EditText
     private lateinit var dateEditText: EditText
     private lateinit var departureRadioButton: RadioButton
-    private val arrivalRadioButton: RadioButton? = view?.findViewById(R.id.routeOnArrivalRadioButton)
     private lateinit var routesOriginEditText: EditText
     private lateinit var routesDestinationEditText: EditText
 
@@ -75,7 +81,43 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
         routesDestinationEditText.setOnClickListener { startActivityForResult(Intent(this.context, RouteLocationPickerActivity::class.java), LocationType.DESTINATION.ordinal) }
 
         val searchRoutesButton = view.findViewById<Button>(R.id.routesSearchRouteButton)
-        searchRoutesButton.setOnClickListener { v -> startActivity(Intent(this.context, RouteResultsActivity::class.java)) }
+        searchRoutesButton.setOnClickListener { v ->
+            view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.VISIBLE
+            val timeType = if(departureRadioButton.isChecked) {
+                "departure"
+            } else {
+                "arrival"
+            }
+            val request = RoutesDataRequest(
+                    mOriginCoords,
+                    mDestinationCoords,
+                    mRequestDateFormatter.format(mTime.time),
+                    mRequestTimeFormatter.format(mTime.time),
+                    timeType
+            )
+            FetchDataSingleton.getInstance(v.context).getRouteResults(request, object: RoutesDataCallback {
+            override fun onSuccess(response: List<Route>, context: Context) {
+                view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.INVISIBLE
+                if(response.isEmpty()) {
+                    view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.INVISIBLE
+                    val noAlertsSnackbar = Snackbar.make(view.findViewById(R.id.coordinatorLayout), "No routes found", Snackbar.LENGTH_SHORT)
+                    noAlertsSnackbar.show()
+                } else {
+                    val fetchedData: List<Route> = response
+                    val startupIntent = Intent(v.context, RouteResultsActivity::class.java)
+                    startupIntent.putParcelableArrayListExtra("resultsData", fetchedData as ArrayList<Route>)
+                    startActivity(startupIntent)
+                }
+
+            }
+            override fun onFailure(error: String, context: Context) {
+                view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.INVISIBLE
+                val noAlertsSnackbar = Snackbar.make(view.findViewById(R.id.coordinatorLayout), error, Snackbar.LENGTH_SHORT)
+                noAlertsSnackbar.show()
+            }
+            })
+        }
+
         return view
     }
 

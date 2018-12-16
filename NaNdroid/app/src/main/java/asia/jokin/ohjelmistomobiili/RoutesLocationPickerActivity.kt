@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextWatcher
@@ -31,7 +32,8 @@ class RouteLocationPickerActivity : AppCompatActivity() {
                 println(s)
                 if(searchLocationEditText.text.length > 2) {
                     // Fire request to get datas
-                    FetchDataSingleton.getInstance(applicationContext).getLocations(object: LocationDataCallback {
+                    val request = GeocodeDataRequest(searchLocationEditText.text.toString())
+                    FetchDataSingleton.getInstance(applicationContext).getLocations(request, object: LocationDataCallback {
                         override fun onSuccess(response: List<Point>, context: Context) {
                             mData.clear()
                             mData.add(Point("location", "Current location", LocationSingleton.getLocation().toString()))
@@ -43,6 +45,12 @@ class RouteLocationPickerActivity : AppCompatActivity() {
                                 layoutManager = viewManager
                                 adapter = viewAdapter
                             }
+                        }
+
+                        override fun onFailure(error: String, context: Context) {
+                            println(error)
+                            //val noAlertsSnackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), "Error searching locations: ", Snackbar.LENGTH_SHORT)
+                            //noAlertsSnackbar.show()
                         }
                     })
                 }
