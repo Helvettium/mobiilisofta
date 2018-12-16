@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import org.json.JSONArray
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,7 +31,7 @@ class PopupFragment : Fragment() {
     override fun onViewCreated(aView: View, aSavedInstanceState: Bundle?) {
         super.onViewCreated(aView, aSavedInstanceState)
 
-        mViewAdapter = PopupAdapter(mJSONData)
+        mViewAdapter = PopupAdapter(mDepartures)
         mViewManager = LinearLayoutManager(activity)
         mTitleText = aView.findViewById(R.id.popupTitle)
         mRecyclerView = aView.findViewById<RecyclerView>(R.id.popupRCV).apply {
@@ -42,15 +43,35 @@ class PopupFragment : Fragment() {
 
     fun showStop(aStopCode: Int, aApplicationContext: Context) {
 
-
         // Haetaan pysäkin tiedot
         FetchDataSingleton.getInstance(aApplicationContext).getStopData(aStopCode, object: DataCallback {
             override fun onSuccess(response: JSONArray, context: Context) {
-                val stopData = response.getJSONObject(0)
-                mTitleText.text = stopData.get("name_fi").toString()
+                // Tyhjennetään lista
+                mDepartures.clear()
+
+                // Pysäkin nimi
+                val jsonObject = response.getJSONObject(0)
+                mTitleText.text = jsonObject.get("name_fi").toString()
+
+                // Lähtevät vuorot
+                val departures = jsonObject.get("departures") as JSONArray
+
+                // Iteroidaan palautettu lista
+                for(i in 0 until departures.length()) {
+                    val json = departures.getJSONObject(i)
+                    val code = json.getString("code")
+                    val date = json.getString("date")
+                    val name = json.getString("name1")
+                    val time = "$json.getString('time').substring(0, 2):$json.getString('time').substring(0, 4)"
+                    val item = PopupDeparture(code, date, name, time)
+
+                    mDepartures.add(item)
+                }
+
+                mViewAdapter.notifyDataSetChanged()
 
 
-                Log.d("JSONArray", response.toString())
+                // Log.d("JSONArray", response.names().toString())
 
                 // Do stuff
                 /*
