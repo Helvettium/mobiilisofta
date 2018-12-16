@@ -108,7 +108,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
 
     private fun openStop(aCode: Int) {
         // Näytetään pysäkin tiedot
-        mPopup.showStop(aCode, this.applicationContext)
+        mPopup.updatePopup(aCode, this.applicationContext)
 
         // Jos fragment on vielä piilossa, tuodaan se näkyviin
         if (mPopup.isHidden) {
