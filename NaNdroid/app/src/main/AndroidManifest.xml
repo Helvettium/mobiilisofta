@@ -54,6 +54,9 @@
         <activity
             android:name=".RouteResultsActivity"
             android:label="@string/title_activity_routeresults" />
+        <activity
+            android:name=".RouteLocationPickerActivity"
+            android:label="@string/title_activity_routeresults" />
     </application>
 
 </manifest>

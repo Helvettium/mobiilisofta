@@ -99,6 +99,7 @@ class RoutesResultsCardAdapter (private val inputData: List<List<Route>>, contex
             adapter = infoViewAdapter
         }
         infoRecyclerView.visibility = View.GONE
+        // TODO Change arrow when view is open
         holder.cardView.findViewById<ImageButton>(R.id.showRouteButton).setOnClickListener {
             if(!mInfoVisible) {
                 infoRecyclerView.visibility = View.VISIBLE

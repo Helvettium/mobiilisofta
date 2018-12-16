@@ -13,7 +13,6 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     private val stops = arrayOf("Yksi", "kaksi", "Kolme")
     private var mTime: Calendar = Calendar.getInstance()
@@ -24,6 +23,14 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
     private lateinit var departureRadioButton: RadioButton
     private val arrivalRadioButton: RadioButton? = view?.findViewById(R.id.routeOnArrivalRadioButton)
     private lateinit var routesOriginEditText: EditText
+    private lateinit var routesDestinationEditText: EditText
+
+    private var mOriginCoords: String = ""
+    private var mDestinationCoords: String = ""
+
+    enum class LocationType {
+        ORIGIN, DESTINATION
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -61,8 +68,11 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
         departureRadioButton = view.findViewById(R.id.routeOnDepartureTimeRadioButton)
         departureRadioButton.isChecked = true
 
-        routesOriginEditText = view.findViewById<EditText>(R.id.routesOriginTextInput)
-        routesOriginEditText.setOnClickListener { startActivityForResult(Intent(this.context, RouteLocationPickerActivity::class.java), 1) }
+        routesOriginEditText = view.findViewById(R.id.routesOriginTextInput)
+        routesOriginEditText.setOnClickListener { startActivityForResult(Intent(this.context, RouteLocationPickerActivity::class.java), LocationType.ORIGIN.ordinal) }
+
+        routesDestinationEditText = view.findViewById(R.id.routesDestinationTextInput)
+        routesDestinationEditText.setOnClickListener { startActivityForResult(Intent(this.context, RouteLocationPickerActivity::class.java), LocationType.DESTINATION.ordinal) }
 
         val searchRoutesButton = view.findViewById<Button>(R.id.routesSearchRouteButton)
         searchRoutesButton.setOnClickListener { v -> startActivity(Intent(this.context, RouteResultsActivity::class.java)) }
@@ -83,11 +93,17 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 1) {
+        if (requestCode == LocationType.ORIGIN.ordinal) {
             if (resultCode == RESULT_OK) {
-                println("saatu dataa")
-                println(data?.getStringExtra("locationName"))
                 routesOriginEditText.setText(data?.getStringExtra("locationName"))
+                mOriginCoords = data?.getStringExtra("coords").toString()
+            }
+        } else if (requestCode == LocationType.DESTINATION.ordinal) {
+            if (resultCode == RESULT_OK) {
+                println("saatu kohde")
+                println(data?.getStringExtra("locationName"))
+                routesDestinationEditText.setText(data?.getStringExtra("locationName"))
+                mDestinationCoords = data?.getStringExtra("coords").toString()
             }
         }
     }

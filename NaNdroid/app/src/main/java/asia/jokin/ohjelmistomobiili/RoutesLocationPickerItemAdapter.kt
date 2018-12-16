@@ -4,17 +4,25 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import kotlinx.android.synthetic.main.routes_pick_location_item.view.*
 
-class RoutesLocationPickerItemAdapter(private val locationList: ArrayList<String>, private val clickListener: (String) -> Unit) :
+class RoutesLocationPickerItemAdapter(private val locationList: List<Point>, private val clickListener: (Point) -> Unit) :
         RecyclerView.Adapter<RoutesLocationPickerItemAdapter.LocationResultViewHolder>() {
 
-    class LocationResultViewHolder(val itemview: ConstraintLayout) : RecyclerView.ViewHolder(itemview) {
-        fun bind(name: String, clickListener: (String) -> Unit) {
-            itemView.routeLocationNameTextView.text = name
-            itemView.setOnClickListener { clickListener(name)}
+    class LocationResultViewHolder(private val itemview: ConstraintLayout) : RecyclerView.ViewHolder(itemview) {
+        fun bind(point: Point, clickListener: (Point) -> Unit) {
+            itemView.routeLocationNameTextView.text = point.name
+            val locIcon = if(point.locType == "stop") {
+                R.drawable.ic_bus_glyph
+            }
+            else if(point.locType == "address"){
+                R.drawable.ic_street_glyph
+            }
+            else {
+                R.drawable.ic_location_glyph
+            }
+            itemview.routeLocationTypeImageVIew.setImageResource(locIcon)
+            itemView.setOnClickListener { clickListener(point)}
         }
     }
 

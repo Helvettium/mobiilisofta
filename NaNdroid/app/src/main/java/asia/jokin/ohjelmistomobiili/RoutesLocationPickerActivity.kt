@@ -1,5 +1,6 @@
 package asia.jokin.ohjelmistomobiili
 
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +11,7 @@ import android.widget.EditText
 import android.text.Editable
 
 class RouteLocationPickerActivity : AppCompatActivity() {
-    private var stops = arrayListOf<String>("Yksi", "kaksi", "Kolme")
+    private lateinit var mData: ArrayList<Point>
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -21,7 +22,8 @@ class RouteLocationPickerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.routes_pick_location_activity)
-        viewAdapter = RoutesLocationPickerItemAdapter(stops, { location: String -> locationItemClicked(location) })
+        mData = ArrayList()
+        mData.add(Point("location", "Current location", LocationSingleton.getLocation().toString()))
 
         searchLocationEditText = findViewById(R.id.searchLocationEditText)
         searchLocationEditText.addTextChangedListener(object : TextWatcher {
@@ -29,9 +31,20 @@ class RouteLocationPickerActivity : AppCompatActivity() {
                 println(s)
                 if(searchLocationEditText.text.length > 2) {
                     // Fire request to get datas
-                    val newData = arrayListOf<String>("Yksi", "kaksi", "Kolme")
-                    stops.addAll(newData)
-                    viewAdapter.notifyDataSetChanged()
+                    FetchDataSingleton.getInstance(applicationContext).getLocations(object: LocationDataCallback {
+                        override fun onSuccess(response: List<Point>, context: Context) {
+                            mData.clear()
+                            mData.add(Point("location", "Current location", LocationSingleton.getLocation().toString()))
+                            mData.addAll(response)
+                            viewManager = LinearLayoutManager(applicationContext)
+                            viewAdapter = RoutesLocationPickerItemAdapter(mData.toList()) { point: Point -> locationItemClicked(point) }
+                            recyclerView = findViewById<RecyclerView>(R.id.locationListRecyclerView).apply {
+                                setHasFixedSize(true)
+                                layoutManager = viewManager
+                                adapter = viewAdapter
+                            }
+                        }
+                    })
                 }
             }
 
@@ -45,48 +58,20 @@ class RouteLocationPickerActivity : AppCompatActivity() {
             }
         })
 
-        viewManager = LinearLayoutManager(this)
-
-
-
+        // Set everything so we get non-empty UI until user searches for a location
+        viewManager = LinearLayoutManager(applicationContext)
+        viewAdapter = RoutesLocationPickerItemAdapter(mData.toList()) { point: Point -> locationItemClicked(point) }
         recyclerView = findViewById<RecyclerView>(R.id.locationListRecyclerView).apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            setHasFixedSize(false)
-
-            // use a linear layout manager
+            setHasFixedSize(true)
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
         }
-
-/*        FetchDataSingleton.getInstance(this.applicationContext).getRouteResults(object: RoutesDataCallback {
-            override fun onSuccess(response: List<List<Route>>, context: Context) {
-                val fetchedData: List<List<Route>> = response
-                println(response)
-
-                viewAdapter = RoutesResultsCardAdapter(fetchedData, context)
-
-                recyclerView = findViewById<RecyclerView>(R.id.locationListRecyclerView).apply {
-                    // use this setting to improve performance if you know that changes
-                    // in content do not change the layout size of the RecyclerView
-                    setHasFixedSize(false)
-
-                    // use a linear layout manager
-                    layoutManager = viewManager
-
-                    // specify an viewAdapter (see also next example)
-                    adapter = viewAdapter
-                }
-            }
-        })*/
     }
 
-    private fun locationItemClicked(location : String) {
-        println(location)
+    private fun locationItemClicked(point: Point) {
         val data = Intent()
-        data.putExtra("locationName", location)
+        data.putExtra("locationName", point.name)
+        data.putExtra("coords", point.coords)
         setResult(RESULT_OK, data)
         finish()
     }
