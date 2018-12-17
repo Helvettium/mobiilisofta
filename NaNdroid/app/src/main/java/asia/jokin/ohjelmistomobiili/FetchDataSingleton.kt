@@ -1,11 +1,11 @@
 package asia.jokin.ohjelmistomobiili
 
 import android.content.Context
-import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
@@ -206,11 +206,35 @@ class FetchDataSingleton private constructor(context: Context) {
                     callback.onSuccess(parseData(response), context)
                 },
                 Response.ErrorListener { response ->
-                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+                    System.err.println("Error in retrieving general messages $response")
                 })
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)
+    }
+
+    fun getRouteResults(request: RoutesDataRequest, callback: RoutesDataCallback) {
+        val requestUrl = "$BASE_URL&request=route&from=${request.from}&to=${request.to}&date=${request.Date}&time=${request.Time}&timetype=${request.timeType}"
+        val stringRequest = StringRequest(Request.Method.GET, requestUrl,
+                Response.Listener { response ->
+                    callback.onSuccess(RoutesDataParser.parseRouteResultData(response.toString()), context)
+                },
+                Response.ErrorListener { response ->
+                    callback.onFailure("Error retrieving route: $response", this.context)
+                })
+        queue.add(stringRequest)
+    }
+
+    fun getLocations(request: GeocodeDataRequest, callback: LocationDataCallback) {
+        val requestUrl = "$BASE_URL&request=geocode&key=${request.key}"
+        val stringRequest = StringRequest(Request.Method.GET, requestUrl,
+                Response.Listener { response ->
+                    callback.onSuccess(RoutesDataParser.parseLocationResultData(response.toString()), context)
+                },
+                Response.ErrorListener { response ->
+                    callback.onFailure("Error retrieving geocode: $response", this.context)
+                })
+        queue.add(stringRequest)
     }
 
     companion object : SingletonHolder<FetchDataSingleton, Context>(::FetchDataSingleton)

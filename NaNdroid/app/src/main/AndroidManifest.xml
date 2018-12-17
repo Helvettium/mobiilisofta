@@ -51,6 +51,12 @@
             android:name=".PopupActivity"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert" />
         <activity android:name=".LinePopup"></activity>
+        <activity
+            android:name=".RouteResultsActivity"
+            android:label="@string/title_activity_routeresults" />
+        <activity
+            android:name=".RouteLocationPickerActivity"
+            android:label="@string/title_activity_routeresults" />
     </application>
 
 </manifest>
