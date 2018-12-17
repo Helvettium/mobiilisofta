@@ -16,9 +16,9 @@ import java.util.*
 
 class StopsFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var recyclerView7: RecyclerView
+    private lateinit var viewAdapter7: RecyclerView.Adapter<*>
+    private lateinit var viewManager7: RecyclerView.LayoutManager
     private var fetchManager = FetchDataSingleton
     private lateinit var timerTask: TimerTask
     private var timer = Timer()
@@ -39,9 +39,8 @@ class StopsFragment : Fragment() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         val currentLocation = LatLng(LocationSingleton.getLat(),LocationSingleton.getLng())
-        //Toast.makeText(this@StopsFragment.activity,currentLocation.latitude.toString()+", "+currentLocation.longitude.toString(),Toast.LENGTH_LONG).show()
 
-        viewManager = LinearLayoutManager(activity)
+        viewManager7 = LinearLayoutManager(activity)
 
         val preference: Int = preferences.getString("nearby","5").toInt()
 
@@ -52,20 +51,41 @@ class StopsFragment : Fragment() {
 
                     fetchedData.add(response[i].toString())
                 }
-                viewAdapter = StopsAdapter(fetchedData,activity!!.applicationContext,view)
+                viewAdapter7 = StopsAdapter(fetchedData,activity!!.applicationContext,view)
 
-                recyclerView = view.findViewById<RecyclerView>(R.id.stopsRecycle).apply {
+                recyclerView7 = view.findViewById<RecyclerView>(R.id.stopsRecycle).apply {
                     // use this setting to improve performance if you know that changes
                     // in content do not change the layout size of the RecyclerView
                     setHasFixedSize(true)
 
                     // use a linear layout manager
-                    layoutManager = viewManager
+                    layoutManager = viewManager7
 
                     // specify an viewAdapter (see also next example)
-                    adapter = viewAdapter
+                    adapter = viewAdapter7
 
                 }
+            }
+        })
+    }
+    private fun updateStops(view: View){
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val currentLocation = LatLng(LocationSingleton.getLat(),LocationSingleton.getLng())
+
+        //viewManager7 = LinearLayoutManager(activity)
+
+        val preference: Int = preferences.getString("nearby","5").toInt()
+
+        fetchManager.getInstance(activity!!.applicationContext).getClosestStops(currentLocation, preference, object: DataCallback{
+            override fun onSuccess(response: JSONArray, context: Context) {
+                val fetchedData: ArrayList<String> = ArrayList()
+                for (i in (0 until response.length())) {
+
+                    fetchedData.add(response[i].toString())
+                }
+
+                recyclerView7.swapAdapter(StopsAdapter(fetchedData,activity!!.applicationContext,view),true)
+
             }
         })
     }
@@ -74,7 +94,7 @@ class StopsFragment : Fragment() {
         timerTask = object : TimerTask() {
             override fun run() {
                 handler.post {
-                    drawStops(view)
+                    updateStops(view)
                 }
             }
         }
