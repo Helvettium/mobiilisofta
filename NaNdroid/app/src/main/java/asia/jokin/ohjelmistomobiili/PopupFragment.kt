@@ -112,41 +112,9 @@ class PopupFragment : Fragment() {
         }
 
         return false
-/*
-            for(i in (0 until stopArray.length())) {
-                if (stopArray[i] is JSONObject) {
-                    val jsonObject: JSONObject = stopArray[i] as JSONObject
-                    if (jsonObject.getString("code") == itemCode) {
-                        favStar.setImageResource(R.drawable.ic_star_unselect)
-                        stopArray.remove(i)
-
-                        val editor: SharedPreferences.Editor = preferences.edit()
-                        editor.putString("favs_array_stops", stopArray.toString())
-                        editor.commit()
-
-                        return
-                    }
-                }
-                else {
-                    Log.e("changeFavStatus","Unknown setting type")
-                }
-            }
-            val newObject = JSONObject("{'name':'$itemName','code':'$itemCode','lines':'$itemLines'}")
-            favStar.setImageResource(R.drawable.ic_star_select)
-            stopArray.put(newObject)
-            Log.e("changeFavStatus","status added with "+newObject.toString())
-            val editor: SharedPreferences.Editor = preferences.edit()
-            editor.putString("favs_array_stops", stopArray.toString())
-            editor.commit()
-
-        }
-           */
     }
 
     fun toggleFavourite(aJsonObject: JSONObject) {
-        // Debug
-        Log.d("Favs", aJsonObject.toString())
-        
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val stopString = preferences.getString("favs_array_stops","[]")
         val stopCode = aJsonObject.getString("code")
@@ -177,10 +145,10 @@ class PopupFragment : Fragment() {
             // Tähti
             mTitleStar.setImageResource(R.drawable.ic_star_select)
 
-            // Listaan menevä tieto
+            // Listaan menevä tieto featuring typerä purkka koska määrittelyssä ei oltu tarpeeksi tarkkoja
             val newFavourite = JSONObject()
+                newFavourite.put("code", aJsonObject.getString("code").toInt().toString())
                 newFavourite.put("name", aJsonObject.getString("name_fi"))
-                newFavourite.put("code", aJsonObject.getString("code"))
                 newFavourite.put("lines", aJsonObject.getString("lines"))
 
             // Lisätään
@@ -188,15 +156,6 @@ class PopupFragment : Fragment() {
             editor = preferences.edit()
             editor.putString("favs_array_stops", stopArray.toString())
             editor.apply()
-
-/*
-            favStar.setImageResource(R.drawable.ic_star_select)
-            stopArray.put(newObject)
-            Log.e("changeFavStatus","status added with "+newObject.toString())
-            val editor: SharedPreferences.Editor = preferences.edit()
-            editor.putString("favs_array_stops", stopArray.toString())
-            editor.commit()
-*/
         }
     }
 }
