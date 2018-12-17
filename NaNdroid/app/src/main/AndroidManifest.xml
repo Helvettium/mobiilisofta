@@ -18,14 +18,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FrontPage" />
+        <activity
+            android:name=".FrontPage"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AlertsActivity"
             android:label="@string/title_activity_alerts" />
@@ -50,7 +54,7 @@
         <activity
             android:name=".PopupActivity"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert" />
-        <activity android:name=".LinePopup"></activity>
+        <activity android:name=".LinePopup"/>
         <activity
             android:name=".RouteResultsActivity"
             android:label="@string/title_activity_routeresults" />
