@@ -48,6 +48,11 @@ class FavouritesFragment : Fragment() {
         drawLines(lateView)
     }
 
+    override fun onPause() {
+        super.onPause()
+        timerTask.cancel()
+    }
+
     private fun drawStops(view: View){
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
