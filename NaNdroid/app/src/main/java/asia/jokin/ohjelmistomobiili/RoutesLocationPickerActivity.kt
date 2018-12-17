@@ -24,7 +24,7 @@ class RouteLocationPickerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.routes_pick_location_activity)
         mData = ArrayList()
-        mData.add(Point("location", "Current location", LocationSingleton.getLocation().toString()))
+        mData.add(Point("location", "Current location", "${LocationSingleton.getLng()},${LocationSingleton.getLat()}"))
 
         searchLocationEditText = findViewById(R.id.searchLocationEditText)
         searchLocationEditText.addTextChangedListener(object : TextWatcher {
