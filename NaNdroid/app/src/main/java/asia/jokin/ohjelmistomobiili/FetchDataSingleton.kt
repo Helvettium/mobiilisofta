@@ -66,7 +66,7 @@ class FetchDataSingleton private constructor(context: Context) {
             }
         })
         */
-        if (SphericalUtil.computeDistanceBetween(latlng, lastCoord) > 100){
+        if (SphericalUtil.computeDistanceBetween(latlng, lastCoord) > 150){
             var lat = latlng.toString()
             lat = lat.substringAfterLast("(", ")")
             lat = lat.dropLast(1)
@@ -167,7 +167,7 @@ class FetchDataSingleton private constructor(context: Context) {
         })
         */
         val now = Calendar.getInstance()
-        // now.add(Calendar.MINUTE, -1)
+        now.add(Calendar.MINUTE, -1)
         if (now.after(closestTime)) {
             val stopsData = JSONArray() //JSONArray for the return value
 
