@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:clickable="true"
-        android:focusable="false"
+        android:focusable="true"
         android:padding="8dp"
         android:text="Pysäkin nimi"
         android:textColor="#000"
@@ -22,15 +22,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/popupRCV"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popupTitle" />
-
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/popupStar"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="Favourite toggle star"
@@ -40,4 +33,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_star_white" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/popupRCV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popupTitle" />
 </android.support.constraint.ConstraintLayout>

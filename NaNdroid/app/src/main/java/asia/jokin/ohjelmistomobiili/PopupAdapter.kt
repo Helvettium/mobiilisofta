@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-class PopupAdapter(private val aDepartures: MutableList<PopupDeparture>): RecyclerView.Adapter<PopupAdapter.ViewHolder>() {
+class PopupAdapter(private val aDepartures: MutableList<PopupData>): RecyclerView.Adapter<PopupAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         // Datan koko, adapterin vaatimuksia
