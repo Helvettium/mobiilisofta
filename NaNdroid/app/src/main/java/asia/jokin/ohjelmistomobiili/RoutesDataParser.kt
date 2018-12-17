@@ -48,9 +48,10 @@ class RoutesDataParser {
         }
 
         fun parseLocationResultData(data: String): List<Point> {
-            val locs = ArrayList<Point>().toList()
-            val parsedLocs = Gson().fromJson(data, Array<Point>::class.java).toList()
-            return if(parsedLocs != null) parsedLocs else locs
+            return when(data.isEmpty()) {
+                true -> ArrayList<Point>().toList()
+                false -> Gson().fromJson(data, Array<Point>::class.java).toList()
+            }
         }
     }
 }
