@@ -138,7 +138,7 @@ class FavouritesFragment : Fragment() {
             }
 
             recyclerView2.swapAdapter(FavouritesLinesAdapter(fetchedData,activity!!.applicationContext,view),true)
-            
+
         }
     }
 
