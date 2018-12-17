@@ -73,4 +73,12 @@ class PopupFragment : Fragment() {
             }
         })
     }
+
+    fun isFavourite(aCode: String) {
+
+    }
+
+    fun toggleFavourite(aCode: String) {
+
+    }
 }
