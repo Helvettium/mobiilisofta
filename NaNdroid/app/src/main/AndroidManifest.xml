@@ -52,20 +52,11 @@
 
         <activity
             android:name=".MapsActivity"
-<<<<<<< HEAD
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".LinePopup"></activity>
-=======
             android:label="@string/title_activity_maps"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".PopupActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert"
             android:screenOrientation="portrait" />
         <activity
             android:name=".LinePopup"
             android:screenOrientation="portrait" />
->>>>>>> remotes/origin/master
         <activity
             android:name=".RouteResultsActivity"
             android:label="@string/title_activity_routeresults"
@@ -75,5 +66,4 @@
             android:label="@string/title_activity_routelocationpicker"
             android:screenOrientation="portrait" />
     </application>
-
 </manifest>
