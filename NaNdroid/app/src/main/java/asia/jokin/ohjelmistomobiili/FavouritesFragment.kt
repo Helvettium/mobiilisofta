@@ -48,9 +48,15 @@ class FavouritesFragment : Fragment() {
         drawLines(lateView)
     }
 
+    override fun onPause() {
+        super.onPause()
+        timerTask.cancel()
+    }
+
     private fun drawStops(view: View){
+
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        viewManager3 = LinearLayoutManager(activity)
+        //viewManager3 = LinearLayoutManager(activity)
         val stopString = preferences.getString("favs_array_stops","[]")
         if (stopString != ""){
             val stopArray = JSONArray(stopString)
@@ -78,7 +84,7 @@ class FavouritesFragment : Fragment() {
     }
     private fun drawLines(view: View){
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        viewManager2 = LinearLayoutManager(activity)
+        //viewManager2 = LinearLayoutManager(activity)
         val stopString = preferences.getString("favs_array_lines","[]")
         if (stopString != ""){
             val stopArray = JSONArray(stopString)
@@ -104,12 +110,49 @@ class FavouritesFragment : Fragment() {
             }
         }
     }
+
+    private fun updateStops(view: View){
+
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        //viewManager3 = LinearLayoutManager(activity)
+        val stopString = preferences.getString("favs_array_stops","[]")
+        if (stopString != ""){
+            val stopArray = JSONArray(stopString)
+
+            val fetchedData: ArrayList<String> = ArrayList()
+            for (i in (0 until stopArray.length())) {
+
+                fetchedData.add(stopArray[i].toString())
+            }
+
+            recyclerView3.swapAdapter(FavouritesStopsAdapter(fetchedData,activity!!.applicationContext,view),true)
+
+        }
+    }
+    private fun updateLines(view: View){
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        //viewManager2 = LinearLayoutManager(activity)
+        val stopString = preferences.getString("favs_array_lines","[]")
+        if (stopString != ""){
+            val stopArray = JSONArray(stopString)
+
+            val fetchedData: ArrayList<String> = ArrayList()
+            for (i in (0 until stopArray.length())) {
+
+                fetchedData.add(stopArray[i].toString())
+            }
+
+            recyclerView2.swapAdapter(FavouritesLinesAdapter(fetchedData,activity!!.applicationContext,view),true)
+
+        }
+    }
+
     private fun setTimerTask(view: View) {
         timerTask = object : TimerTask() {
             override fun run() {
                 handler.post {
-                    drawStops(view)
-                    drawLines(view)
+                    updateStops(view)
+                    updateLines(view)
                 }
             }
         }

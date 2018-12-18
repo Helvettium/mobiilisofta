@@ -18,20 +18,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FrontPage" />
+        <activity
+            android:name=".FrontPage"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AlertsActivity"
-            android:label="@string/title_activity_alerts" />
+            android:label="@string/title_activity_alerts"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -46,14 +52,28 @@
 
         <activity
             android:name=".MapsActivity"
+<<<<<<< HEAD
             android:label="@string/title_activity_maps" />
         <activity android:name=".LinePopup"></activity>
+=======
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PopupActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LinePopup"
+            android:screenOrientation="portrait" />
+>>>>>>> remotes/origin/master
         <activity
             android:name=".RouteResultsActivity"
-            android:label="@string/title_activity_routeresults" />
+            android:label="@string/title_activity_routeresults"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RouteLocationPickerActivity"
-            android:label="@string/title_activity_routeresults" />
+            android:label="@string/title_activity_routelocationpicker"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

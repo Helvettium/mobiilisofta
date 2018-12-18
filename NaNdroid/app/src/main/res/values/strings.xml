@@ -126,4 +126,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_routeresults">Results</string>
     <string name="title_activity_routelocationpicker">Search</string>
+    <string name="title_fragment_favourites">Favourites</string>
+    <string name="title_fragment_lines">Lines</string>
+    <string name="title_fragment_stops">Stops</string>
 </resources>

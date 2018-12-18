@@ -40,7 +40,7 @@ class LineSingleAdapter (private val inputData: ArrayList<String>, classContext:
         val lineListItem: ConstraintLayout = holder.itemView.findViewById(R.id.lineSingleConstraint)
         val favStar: ImageView = holder.itemView.findViewById(R.id.favStar)
 
-        setFavIcon(favStar,responseData.getString("code"))
+        setFavIcon(favStar,responseData.getString("name"))
 
         busNr.text = responseData.getString("code")
         lineFromTo.text = responseData.getString("name")
@@ -72,7 +72,7 @@ class LineSingleAdapter (private val inputData: ArrayList<String>, classContext:
             for(i in (0 until stopArray.length())) {
                 if (stopArray[i] is JSONObject) {
                     val jsonObject: JSONObject = stopArray[i] as JSONObject
-                    if (jsonObject.getString("code") == itemCode) {
+                    if (jsonObject.getString("name") == itemName) {
                         favStar.setImageResource(R.drawable.ic_star_unselect)
                         stopArray.remove(i)
 
@@ -98,14 +98,14 @@ class LineSingleAdapter (private val inputData: ArrayList<String>, classContext:
 
     }
 
-    private fun setFavIcon(favStar: ImageView, itemCode: String){
+    private fun setFavIcon(favStar: ImageView, itemName: String){
         val stopString = preferences.getString("favs_array_lines","")
         if (stopString != ""){
             val stopArray = JSONArray(stopString)
             for(i in (0 until stopArray.length())) {
                 if (stopArray[i] is JSONObject) {
                     val jsonObject: JSONObject = stopArray[i] as JSONObject
-                    if (jsonObject.getString("code") == itemCode) {
+                    if (jsonObject.getString("name") == itemName) {
                         favStar.setImageResource(R.drawable.ic_star_select)
                         return
                     }
