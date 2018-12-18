@@ -95,7 +95,6 @@ class PopupFragment : Fragment() {
     fun isFavourite(aCode: Int): Boolean {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val stopString = preferences.getString("favs_array_stops", "[]")
-        val stopCode = aCode.toString()
 
         if (stopString != "") {
             val stopArray = JSONArray(stopString)
@@ -103,7 +102,7 @@ class PopupFragment : Fragment() {
             for (i in (0 until stopArray.length())) {
                 if (stopArray[i] is JSONObject) {
                     val stopObject = stopArray[i] as JSONObject
-                    if (stopObject.getString("code") == stopCode) {
+                    if (stopObject.getString("code").toInt() == aCode) {
                         return true
                     }
                 }
@@ -116,7 +115,7 @@ class PopupFragment : Fragment() {
     fun toggleFavourite(aJsonObject: JSONObject) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val stopString = preferences.getString("favs_array_stops","[]")
-        val stopCode = aJsonObject.getString("code")
+        val stopID = aJsonObject.getString("code").toInt()
         val editor: SharedPreferences.Editor
 
         if (stopString != "") {
@@ -125,7 +124,7 @@ class PopupFragment : Fragment() {
             for(i in (0 until stopArray.length())) {
                 if (stopArray[i] is JSONObject) {
                     val jsonObject: JSONObject = stopArray[i] as JSONObject
-                    if (jsonObject.getString("code") == stopCode) {
+                    if (jsonObject.getString("code").toInt() == stopID) {
 
                         // Tähti
                         mTitleStar.setImageResource(R.drawable.ic_star_white)
