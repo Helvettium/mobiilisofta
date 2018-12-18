@@ -45,6 +45,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         mMap.setOnCameraIdleListener(this)
         mMap.setOnMarkerClickListener(this)
 
+        // Piilotetaan yritykset & bussipysäkit
+        mMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_map)));
+
         // Avataan pysäkki jos sellainen on valittu
         val stopCode = intent.getIntExtra("stopid", 0)
 
@@ -64,7 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         val distances = FloatArray(2)
         Location.distanceBetween(mLatLng.latitude, mLatLng.longitude, newLatLng.latitude, newLatLng.longitude, distances)
 
-        if (distances[0] > 500.0) {
+        if (distances[0] > 50.0) {
             mLatLng = newLatLng
             updateStops(newLatLng)
         }
@@ -91,7 +94,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
 
                         // Pysäkki listaan
                         mStops.add(stopCode)
-                        Log.d("Fetch", response.getJSONObject(i).getString("coords"))
+
                         // Koordinaatit tulee stringinä
                         val coords = response.getJSONObject(i).getString("coords").split(",")
                         val options = MarkerOptions()
