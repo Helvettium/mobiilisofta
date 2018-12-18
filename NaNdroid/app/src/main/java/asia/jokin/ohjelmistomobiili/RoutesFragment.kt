@@ -82,42 +82,46 @@ class RoutesFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePicke
 
         val searchRoutesButton = view.findViewById<Button>(R.id.routesSearchRouteButton)
         searchRoutesButton.setOnClickListener { v ->
-            view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.VISIBLE
-            val timeType = if(departureRadioButton.isChecked) {
-                "departure"
-            } else {
-                "arrival"
-            }
-            val request = RoutesDataRequest(
-                    mOriginCoords,
-                    mDestinationCoords,
-                    mRequestDateFormatter.format(mTime.time),
-                    mRequestTimeFormatter.format(mTime.time),
-                    timeType
-            )
-            FetchDataSingleton.getInstance(v.context).getRouteResults(request, object: RoutesDataCallback {
-            override fun onSuccess(response: List<Route>, context: Context) {
-                view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.INVISIBLE
-                if(response.isEmpty()) {
-                    view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.INVISIBLE
-                    val noAlertsSnackbar = Snackbar.make(view.findViewById(R.id.coordinatorLayout), "No routes found", Snackbar.LENGTH_SHORT)
-                    noAlertsSnackbar.show()
+            if(mOriginCoords.isNotEmpty() && mDestinationCoords.isNotEmpty()) {
+                view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.VISIBLE
+                val timeType = if(departureRadioButton.isChecked) {
+                    "departure"
                 } else {
-                    val fetchedData: List<Route> = response
-                    val startupIntent = Intent(v.context, RouteResultsActivity::class.java)
-                    startupIntent.putParcelableArrayListExtra("resultsData", fetchedData as ArrayList<Route>)
-                    startActivity(startupIntent)
+                    "arrival"
                 }
+                val request = RoutesDataRequest(
+                        mOriginCoords,
+                        mDestinationCoords,
+                        mRequestDateFormatter.format(mTime.time),
+                        mRequestTimeFormatter.format(mTime.time),
+                        timeType
+                )
+                FetchDataSingleton.getInstance(v.context).getRouteResults(request, object: RoutesDataCallback {
+                    override fun onSuccess(response: List<Route>, context: Context) {
+                        view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.INVISIBLE
+                        if(response.isEmpty()) {
+                            view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.INVISIBLE
+                            val noAlertsSnackbar = Snackbar.make(view.findViewById(R.id.coordinatorLayout), "No routes found", Snackbar.LENGTH_SHORT)
+                            noAlertsSnackbar.show()
+                        } else {
+                            val fetchedData: List<Route> = response
+                            val startupIntent = Intent(v.context, RouteResultsActivity::class.java)
+                            startupIntent.putParcelableArrayListExtra("resultsData", fetchedData as ArrayList<Route>)
+                            startActivity(startupIntent)
+                        }
 
-            }
-            override fun onFailure(error: String, context: Context) {
-                view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.INVISIBLE
-                val noAlertsSnackbar = Snackbar.make(view.findViewById(R.id.coordinatorLayout), error, Snackbar.LENGTH_SHORT)
+                    }
+                    override fun onFailure(error: String, context: Context) {
+                        view.findViewById<ProgressBar>(R.id.routesLoadingIndicator).visibility = View.INVISIBLE
+                        val failureSnackbar = Snackbar.make(view.findViewById(R.id.coordinatorLayout), error, Snackbar.LENGTH_SHORT)
+                        failureSnackbar.show()
+                    }
+                })
+            } else {
+                val noAlertsSnackbar = Snackbar.make(view.findViewById(R.id.coordinatorLayout), "Missing origin or destination", Snackbar.LENGTH_SHORT)
                 noAlertsSnackbar.show()
             }
-            })
         }
-
         return view
     }
 
