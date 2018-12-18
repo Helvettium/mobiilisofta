@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -63,7 +64,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
         val distances = FloatArray(2)
         Location.distanceBetween(mLatLng.latitude, mLatLng.longitude, newLatLng.latitude, newLatLng.longitude, distances)
 
-        if (distances[0] > 10.0) {
+        if (distances[0] > 500.0) {
             mLatLng = newLatLng
             updateStops(newLatLng)
         }
@@ -78,7 +79,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
 
     private fun updateStops(aLatLng: LatLng) {
         // Haetaan pysäkit
-        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(aLatLng, 1000, object: DataCallback {
+        FetchDataSingleton.getInstance(this.applicationContext).getStopsData(aLatLng, 5000, object: DataCallback {
             override fun onSuccess(response: JSONArray, context: Context) {
 
                 // Iteroidaan palautettu lista
@@ -90,7 +91,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnCamera
 
                         // Pysäkki listaan
                         mStops.add(stopCode)
-
+                        Log.d("Fetch", response.getJSONObject(i).getString("coords"))
                         // Koordinaatit tulee stringinä
                         val coords = response.getJSONObject(i).getString("coords").split(",")
                         val options = MarkerOptions()

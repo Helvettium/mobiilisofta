@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,10 +51,10 @@ class PopupFragment : Fragment() {
                 // Helpommin käsiteltävään muotoon
                 val jsonObject = response.getJSONObject(0)
 
-                // Pysäkin nimi
+                // Otsikko
                 mTitleText.text = jsonObject.get("name_fi").toString()
 
-                // Favourites -tähti
+                // Tähti
                 if (isFavourite(jsonObject.getString("code").toInt())) {
                     mTitleStar.setImageResource(R.drawable.ic_star_select)
                 }
@@ -63,7 +62,7 @@ class PopupFragment : Fragment() {
                     mTitleStar.setImageResource(R.drawable.ic_star_white)
                 }
 
-                // Favourites -listener
+                // Tähden listener
                 mTitleStar.setOnClickListener {
                     toggleFavourite(jsonObject)
                 }
